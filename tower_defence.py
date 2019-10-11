@@ -12,19 +12,40 @@ from game.splat import SplatLoader
 from tiled_levels.tiled_level import TiledLevel
 from tiled_levels.map_editor import MapEditor
 from collision.collision_grid import CollisionGrid
-from game.monster_wave_spawner import MonsterWaveSpawner
-from game.main_menu import MainMenu
+from monster_wave_spawner import MonsterWaveSpawner
+from main_menu import MainMenu
 from game.select_level import SelectLevelMenu
-from game.laser_turret import LaserTurret
+from laser_turret import LaserTurret
 
 
+# -------------------------------------
+# Challenge 1 is in the main_menu file
+# -------------------------------------
+
+
+# --------------------------------------------------------
+# Challenge 3 - Part A (Change 1 line)
+# -------------------------------------
+#
+# Enabling the laser turret.
+#
+# First thing to do is set it to cost
+# a sensible (affordable) amount to build below.
+#
+# HINT
+# ----
+# - Try 500.
+#
+# --------------------------
+# Challenge 3 continues in the 'laser_turret' code file.
+# --------------------------------------------------------
 class TurretCosts:
     def __init__(self):
         self.gun = 150
         self.flamer = 250
         self.missile = 400
         self.slow = 700
-        self.laser = 500
+        self.laser = 50000
 
 
 class ScreenData:
@@ -99,7 +120,7 @@ def main():
     fun_large_font = pygame.font.Font("data/JustAnotherHand.ttf", 64)
     fun_very_small_font = pygame.font.Font("data/JustAnotherHand.ttf", 20)
     small_font = pygame.font.Font(None, 16)
-    
+
     fonts.append(font)
     fonts.append(large_font)
     fonts.append(title_font)
@@ -130,10 +151,10 @@ def main():
     editor = None
 
     grid_size = 64
-    screen_filling_number_of_grid_squares = [int(x_screen_size/grid_size),
-                                             int(y_screen_size/grid_size)]
+    screen_filling_number_of_grid_squares = [int(x_screen_size / grid_size),
+                                             int(y_screen_size / grid_size)]
     collision_grid = CollisionGrid(screen_filling_number_of_grid_squares, grid_size)
-    
+
     upgrade_hud_active = False
     active_upgrade_turret = None
     player_resources = PlayerResources()
@@ -161,7 +182,7 @@ def main():
     count_down_message = ""
     while running:
         frame_time = clock.tick(60)
-        time_delta = min(frame_time/1000.0, 0.1)
+        time_delta = min(frame_time / 1000.0, 0.1)
 
         if is_main_menu:
             is_main_menu_and_index = main_menu.run(screen)
@@ -187,21 +208,21 @@ def main():
                                          explosions_sprite_sheet)
                 tiled_level.load_tiles()
                 tiled_level.update_offset_position(tiled_level.find_player_start(), all_tile_sprites)
-                
+
                 editor = MapEditor(tiled_level, editor_hud_rect, fonts, all_square_sprites)
                 is_map_editor = True
                 is_select_level = False
         elif is_loading:
             is_loading = False
-            
-            # clear level                
+
+            # clear level
             tiled_level = TiledLevel(selected_level_path, [40, 21], all_tile_sprites, all_monster_sprites,
                                      all_square_sprites, image_atlas, monsters, screen_data, explosions_sprite_sheet)
             tiled_level.load_tiles()
             tiled_level.update_offset_position(tiled_level.find_player_start(), all_tile_sprites)
             monster_wave_spawner = MonsterWaveSpawner(monsters, tiled_level.monster_walk_path, 10, all_monster_sprites,
                                                       image_atlas, collision_grid, splat_loader)
-           
+
             is_play_game = True
             restart_game = True
             should_redraw_static_sprites = True
@@ -244,7 +265,7 @@ def main():
 
                 # reset player resources
                 player_resources = PlayerResources()
-                
+
                 is_game_over = False
                 is_setup = True
                 setup_accumulator = 0.0
@@ -256,7 +277,7 @@ def main():
                 upgrade_hud_active = False
                 should_show_count_down_message = False
                 display_normal_hud(hud_buttons, hud_sprites, turret_costs, screen_data, fonts, image_atlas)
-                
+
             elif is_game_over:
                 should_show_count_down_message = False
             else:
@@ -275,11 +296,11 @@ def main():
             if on_final_wave and len(monsters) == 0:
                 is_game_over = True
                 win_message = "You are victorious!"
-                
+
             all_turret_sprites.empty()
             all_bullet_sprites.empty()
             all_explosion_sprites.empty()
-                   
+
             # handle UI and inout events
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -288,7 +309,7 @@ def main():
                     if event.key == K_ESCAPE:
                         is_main_menu = True
                         is_play_game = False
-                        
+
                     if event.key == K_g:
                         monster_wave_spawner.wave_points = 1000
                         monster_wave_spawner.wave_time_accumulator = 5.0
@@ -370,7 +391,7 @@ def main():
                                     player_resources.current_cash -= mouse_active_turret.build_cost
                                     mouse_active_turret.placed = True
                                     mouse_active_turret = None
-                                    
+
                                 else:
                                     turrets[:] = [turret for turret in turrets if turret is not mouse_active_turret]
                                     mouse_active_turret = None
@@ -406,18 +427,18 @@ def main():
                 all_bullet_sprites = bullet.update_sprite(all_bullet_sprites)
                 bullet.update_movement_and_collision(monsters, time_delta, new_explosions, explosions)
             bullets[:] = [bullet for bullet in bullets if not bullet.should_die]
-            
+
             for monster in monsters:
                 monster.update_movement_and_collision(time_delta, player_resources,
                                                       tiled_level.position_offset, splat_sprites)
                 monster.update_sprite()
             monsters[:] = [monster for monster in monsters if not monster.should_die]
             new_explosions[:] = []
-   
+
             for turret in turrets:
                 turret.update_movement_and_collision(time_delta, monsters, bullets, pygame.mouse.get_pos())
                 all_turret_sprites = turret.update_sprite(all_turret_sprites)
-               
+
             for explosion in explosions:
                 all_explosion_sprites = explosion.update_sprite(all_explosion_sprites, time_delta)
             explosions[:] = [explosion for explosion in explosions if not explosion.should_die]
@@ -454,7 +475,7 @@ def main():
             for turret in turrets:
                 if turret.show_radius:
                     turret.draw_radius_circle(screen)
-                
+
             pygame.draw.rect(screen, pygame.Color("#646464"), hud_rect, 0)  # draw the hud
             hud_sprites.draw(screen)
             for button in hud_buttons:
@@ -476,12 +497,12 @@ def main():
 
             if time_delta > 0.0:
                 if len(frame_rates) < 300:
-                    frame_rates.append(1.0/time_delta)
+                    frame_rates.append(1.0 / time_delta)
                 else:
                     frame_rates.popleft()
-                    frame_rates.append(1.0/time_delta)
-                    
-                fps = sum(frame_rates)/len(frame_rates)
+                    frame_rates.append(1.0 / time_delta)
+
+                fps = sum(frame_rates) / len(frame_rates)
                 fps_text_render = fonts[3].render("FPS: " + "{:.2f}".format(fps), True, pygame.Color("#FFFFFF"))
                 screen.blit(fps_text_render, fps_text_render.get_rect(centerx=screen_data.hud_dimensions[0] * 0.9,
                                                                       centery=24))
@@ -489,7 +510,7 @@ def main():
             if should_show_count_down_message:
                 count_down_text_render = fonts[3].render(count_down_message, True, pygame.Color("#FFFFFF"))
                 screen.blit(count_down_text_render,
-                            count_down_text_render.get_rect(centerx=screen_data.screen_size[0]/2,
+                            count_down_text_render.get_rect(centerx=screen_data.screen_size[0] / 2,
                                                             centery=24))
             elif not is_setup and not is_game_over:
                 current_wave = str(monster_wave_spawner.current_wave_number)
@@ -498,15 +519,15 @@ def main():
                                                           True, pygame.Color("#FFFFFF"))
                 screen.blit(wave_number_text_render,
                             wave_number_text_render.get_rect(centerx=screen_data.screen_size[0] / 2, centery=24))
-            
+
             if is_game_over:
                 win_message_text_render = fonts[4].render(win_message, True, pygame.Color("#FFFFFF"))
-                win_message_text_render_rect = win_message_text_render.get_rect(centerx=x_screen_size/2,
-                                                                                centery=(y_screen_size/2)-128)
+                win_message_text_render_rect = win_message_text_render.get_rect(centerx=x_screen_size / 2,
+                                                                                centery=(y_screen_size / 2) - 128)
                 play_again_text_render = fonts[3].render("Play Again? Press 'Y' to restart",
                                                          True, pygame.Color("#FFFFFF"))
-                play_again_text_render_rect = play_again_text_render.get_rect(centerx=x_screen_size/2,
-                                                                              centery=(y_screen_size/2)-90)
+                play_again_text_render_rect = play_again_text_render.get_rect(centerx=x_screen_size / 2,
+                                                                              centery=(y_screen_size / 2) - 90)
                 screen.blit(win_message_text_render, win_message_text_render_rect)
                 screen.blit(play_again_text_render, play_again_text_render_rect)
 

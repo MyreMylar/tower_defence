@@ -6,7 +6,7 @@ from game.bulletproof_monster import BulletproofMonster
 from game.fireproof_monster import FireproofMonster
 from game.large_monster import LargeMonster
 from game.fast_tough_monster import FastToughMonster
-from game.large_tough_monster import LargeToughMonster
+from large_tough_monster import LargeToughMonster
 
 
 class MonsterType:
@@ -44,14 +44,38 @@ class MonsterWaveSpawner:
 
         self.available_monsters_for_wave = []
 
+        # -----------------------------------------------------------------
+        # Challenge 2 - part B - 2 LINES OF CODE
+        # ----------------------
+        #
+        # These two dictionaries below (self.all_monster_point_list & self.monster_image_dict) store;
+        # - the monster's points data (how tough it is)
+        # - The monster's image which determines how it looks.
+        #
+        # Note the cool {} curly braces which signify that we are dealing with a dictionary, much cooler than a list
+        # which uses boring [] braces.
+        #
+        # Go ahead and add new entries to both lists for our new monster based on the entries that are already there
+        # for the other types of monsters.
+        #
+        # HINTS
+        # - Give the monster a point cost of 8.
+        # - Almost all the game's graphics are contained in single
+        #   large image called a 'sprite sheet' or a 'texture atlas'. To get the image for our monster
+        #   we just want to pick out one small rectangle from the larger image.
+        # - The rectangle for the large tough monster is (32,224,32,32).
+        #   The last two parameters are the width and height of our rectangle
+        #   and the first two are the image coordinates of the top left corner.
+        # ----------------------------------------
+        # Scroll down for Challenge 2 part D !
+        # ----------------------------------------
         self.all_monster_point_list = {StandardMonster.monster_id: MonsterType(StandardMonster.monster_id, 1),
                                        ToughMonster.monster_id: MonsterType(ToughMonster.monster_id, 2),
                                        FastMonster.monster_id: MonsterType(FastMonster.monster_id, 3),
                                        BulletproofMonster.monster_id: MonsterType(BulletproofMonster.monster_id, 4),
                                        FireproofMonster.monster_id: MonsterType(FireproofMonster.monster_id, 5),
                                        LargeMonster.monster_id: MonsterType(LargeMonster.monster_id, 6),
-                                       FastToughMonster.monster_id: MonsterType(FastToughMonster.monster_id, 7),
-                                       LargeToughMonster.monster_id: MonsterType(LargeToughMonster.monster_id, 8)}
+                                       FastToughMonster.monster_id: MonsterType(FastToughMonster.monster_id, 7)}
 
         self.monster_image_dict = {StandardMonster.monster_id: self.image_atlas.subsurface((0, 160, 16, 16)),
                                    ToughMonster.monster_id: self.image_atlas.subsurface((16, 160, 16, 16)),
@@ -59,8 +83,9 @@ class MonsterWaveSpawner:
                                    FireproofMonster.monster_id: self.image_atlas.subsurface((48, 160, 16, 16)),
                                    FastMonster.monster_id: self.image_atlas.subsurface((0, 192, 16, 24)),
                                    FastToughMonster.monster_id: self.image_atlas.subsurface((16, 192, 16, 24)),
-                                   LargeMonster.monster_id: self.image_atlas.subsurface((0, 224, 32, 32)),
-                                   LargeToughMonster.monster_id: self.image_atlas.subsurface((32, 224, 32, 32))}
+                                   LargeMonster.monster_id: self.image_atlas.subsurface((0, 224, 32, 32))}
+
+        # ---------------------------------------------------------------------------
 
         self.all_monster_sprites = all_monster_sprites
 
@@ -69,7 +94,7 @@ class MonsterWaveSpawner:
         self.current_sub_wave = 1
 
         self.cheapest_point_monster = 1000000000
-        
+
     def update(self, time_delta, offset):
         self.screen_offset = offset
         # if all monsters dead, speed up next wave arrival
@@ -78,7 +103,7 @@ class MonsterWaveSpawner:
 
         new_wave_time = self.time_between_waves - self.time_to_display_countdown
         new_wave_countdown = str(int(self.time_between_waves - self.wave_time_accumulator))
-        if self.wave_time_accumulator >= self.time_between_waves and\
+        if self.wave_time_accumulator >= self.time_between_waves and \
                 self.current_wave_number < self.maximum_wave_number:
             self.should_show_wave_countdown = False
             self.spawn_new_wave()
@@ -129,6 +154,23 @@ class MonsterWaveSpawner:
             self.wave_points -= new_monster.point_cost
             sub_wave_points -= new_monster.point_cost
 
+    # ------------------------------------------------------------------------
+    # Challenge 2 - Part C - 2 LINES OF CODE
+    # ----------------------
+    #
+    # Finally add the LargeToughMonster to the pick_new_monster function!
+    #
+    # Tips
+    # -----
+    #
+    # - See how the other monsters are added with two lines each below,
+    #   you can copy and paste these two lines and change them to refer
+    #   to our new monster.
+    # - Once you've done it your new monster should be in the game and will
+    #   Appear at around wave 8 in the game!
+    # ---------------------------------------------------
+    # CHALLENGE 3 starts in the tower_defence code file.
+    # ------------------------------------------------------------------------
     def pick_new_monster(self):
         monster_type = random.choice(self.available_monsters_for_wave)
         new_monster = None
@@ -161,9 +203,5 @@ class MonsterWaveSpawner:
             new_monster = FastToughMonster(self.monster_walk_path, self.monster_image_dict,
                                            self.all_monster_point_list, self.all_monster_sprites,
                                            self.screen_offset, self.collision_grid, self.splat_loader)
-        if monster_type.id == LargeToughMonster.monster_id:
-            new_monster = LargeToughMonster(self.monster_walk_path, self.monster_image_dict,
-                                            self.all_monster_point_list, self.all_monster_sprites,
-                                            self.screen_offset, self.collision_grid, self.splat_loader)
-        
+
         return new_monster
