@@ -12,38 +12,19 @@ from game.splat import SplatLoader
 from tiled_levels.tiled_level import TiledLevel
 from tiled_levels.map_editor import MapEditor
 from collision.collision_grid import CollisionGrid
-from monster_wave_spawner import MonsterWaveSpawner
-from main_menu import MainMenu
+from game.monster_wave_spawner import MonsterWaveSpawner
+from game.main_menu import MainMenu
 from game.select_level import SelectLevelMenu
-from laser_turret import LaserTurret
-# -------------------------------------
-# Challenge 1 is in the main_menu file
-# -------------------------------------
+from game.laser_turret import LaserTurret
 
 
-# --------------------------------------------------------
-# Challenge 3 - Part A (Change 1 line)
-# -------------------------------------
-#
-# Enabling the laser turret.
-#
-# First thing to do is set it to cost
-# a sensible (affordable) amount to build below.
-#
-# HINT
-# ----
-# - Try 500.
-#
-# --------------------------
-# Challenge 3 continues in the 'laser_turret' code file.
-# --------------------------------------------------------
 class TurretCosts:
     def __init__(self):
         self.gun = 150
         self.flamer = 250
         self.missile = 400
         self.slow = 700
-        self.laser = 50000
+        self.laser = 500
 
 
 class ScreenData:
@@ -460,8 +441,8 @@ def main():
             if mouse_active_turret is not None:
                 all_square_sprites.draw(screen)
             all_monster_sprites.draw(screen)
-            all_bullet_sprites.draw(screen)
             all_turret_sprites.draw(screen)
+            all_bullet_sprites.draw(screen)
             all_explosion_sprites.draw(screen)
 
             # collision debug

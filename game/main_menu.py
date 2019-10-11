@@ -3,21 +3,6 @@ from pygame.locals import *
 
 from game.ui_text_button import UTTextButton
 
-# ------------------------------------------------------
-# Challenge 1 - Using # comments to 'comment out' code 
-# ------------------------------------------------------
-#
-# Figure out how to enable the 'play game' button!
-#
-# TIP
-# -----
-# - You will need to comment out one line of code
-#   that is currently disabling the button.
-#
-# -----------------------
-# Challenge 2 starts in the 'large_tough_monster' file
-# ------------------------------------------------------
-
 
 class MainMenu:
 
@@ -32,9 +17,7 @@ class MainMenu:
 
         self.play_game_button = UTTextButton([437, 515, 150, 35], "Start Game", fonts, 0,
                                              pygame.Color("#646473"), pygame.Color("#FFFFFF"))
-      
-        # self.play_game_button.disable()
-        
+
     def run(self, screen):
         is_main_menu_and_index = [0, 0]
         for event in pygame.event.get():
