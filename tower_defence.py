@@ -1,7 +1,12 @@
-import pygame
-from pygame.locals import *
 from collections import deque
 
+import pygame
+from pygame.locals import *
+from pygame_gui import UIManager
+
+from tiled_levels.tiled_level import TiledLevel
+from tiled_levels.map_editor import MapEditor
+from collision.collision_grid import CollisionGrid
 from game.gun_turret import GunTurret
 from game.flame_turret import FlameTurret
 from game.missile_turret import MissileTurret
@@ -9,9 +14,6 @@ from game.slow_turret import SlowTurret
 from game.hud_button import HUDButton
 from game.player_resources import PlayerResources
 from game.splat import SplatLoader
-from tiled_levels.tiled_level import TiledLevel
-from tiled_levels.map_editor import MapEditor
-from collision.collision_grid import CollisionGrid
 from game.monster_wave_spawner import MonsterWaveSpawner
 from game.main_menu import MainMenu
 from game.select_level import SelectLevelMenu
@@ -74,9 +76,13 @@ def main():
     y_screen_size = 600
     pygame.display.set_caption('Turret Warfare')
     screen = pygame.display.set_mode((x_screen_size, y_screen_size))
+
     background = pygame.Surface(screen.get_size())
     background = background.convert(screen)
     background.fill((95, 140, 95))
+
+    ui_manager = UIManager(screen.get_size(), "data/ui_theme.json")
+
     static_sprite_surface = pygame.Surface(screen.get_size())
     should_redraw_static_sprites = True
     all_tile_sprites = pygame.sprite.Group()
@@ -125,8 +131,9 @@ def main():
                                   screen_data.editor_hud_dimensions[0], screen_data.editor_hud_dimensions[1])
     display_normal_hud(hud_buttons, hud_sprites, turret_costs, screen_data, fonts, image_atlas)
 
-    main_menu = MainMenu(fonts, screen_data)
-    select_level_menu = SelectLevelMenu(fonts, screen_data)
+    main_menu = MainMenu(ui_manager)
+    main_menu.start()
+    select_level_menu = SelectLevelMenu(ui_manager)
     editor = None
 
     grid_size = 64
@@ -164,22 +171,25 @@ def main():
         time_delta = min(frame_time/1000.0, 0.1)
 
         if is_main_menu:
-            is_main_menu_and_index = main_menu.run(screen)
+            is_main_menu_and_index = main_menu.run(screen, time_delta)
             if is_main_menu_and_index[0] == 0:
                 is_main_menu = True
             elif is_main_menu_and_index[0] == 1:
                 is_main_menu = False
                 is_select_level = True
+                main_menu.end()
+                select_level_menu.start()
             elif is_main_menu_and_index[0] == 2:
                 running = False
         elif is_select_level:
-            is_main_menu_and_index = select_level_menu.run(screen)
+            is_main_menu_and_index = select_level_menu.run(screen, time_delta)
             if is_main_menu_and_index[0] == 0:
                 is_select_level = True
             elif is_main_menu_and_index[0] == 1:
                 selected_level_path = select_level_menu.selected_level_path
                 is_select_level = False
                 is_loading = True
+                select_level_menu.end()
             elif is_main_menu_and_index[0] == 2:
                 selected_level_path = select_level_menu.selected_level_path
                 tiled_level = TiledLevel(selected_level_path, [40, 21], all_tile_sprites, all_monster_sprites,
@@ -191,6 +201,7 @@ def main():
                 editor = MapEditor(tiled_level, editor_hud_rect, fonts, all_square_sprites)
                 is_map_editor = True
                 is_select_level = False
+                select_level_menu.end()
         elif is_loading:
             is_loading = False
             
@@ -284,10 +295,14 @@ def main():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     running = False
+
+                ui_manager.process_events(event)
+
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         is_main_menu = True
                         is_play_game = False
+                        main_menu.start()
                         
                     if event.key == K_g:
                         monster_wave_spawner.wave_points = 1000
@@ -427,6 +442,8 @@ def main():
             collision_grid.update_shape_grid_positions()
             collision_grid.check_collisions()
 
+            ui_manager.update(time_delta)
+
             for collided_shape in collision_grid.shapes_collided_this_frame:
                 if collided_shape.owner is not None:
                     collided_shape.owner.react_to_collision()
@@ -509,6 +526,8 @@ def main():
                                                                               centery=(y_screen_size/2)-90)
                 screen.blit(win_message_text_render, win_message_text_render_rect)
                 screen.blit(play_again_text_render, play_again_text_render_rect)
+
+            ui_manager.draw_ui(screen)
 
         pygame.display.flip()  # flip all our drawn stuff onto the screen
 

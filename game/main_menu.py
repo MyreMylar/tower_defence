@@ -1,42 +1,49 @@
 import pygame
 from pygame.locals import *
-
-from game.ui_text_button import UTTextButton
+import pygame_gui
+from pygame_gui.elements.ui_button import UIButton
+from pygame_gui.elements.ui_label import UILabel
 
 
 class MainMenu:
 
-    def __init__(self, fonts, screen_data):
-   
-        self.backgroundImage = pygame.image.load("images/menu_background.png").convert()
+    def __init__(self, ui_manager: pygame_gui.UIManager):
 
-        main_menu_title_string = "Turret Warfare"
-        self.title_text_render = fonts[2].render(main_menu_title_string, True, pygame.Color("#000000"))
-        self.title_text_render_rect = self.title_text_render.get_rect(centerx=screen_data.screen_size[0] * 0.5,
-                                                                      centery=80)
+        self.ui_manager = ui_manager
+        self.background_image = pygame.image.load("images/menu_background.png").convert()
 
-        self.play_game_button = UTTextButton([437, 515, 150, 35], "Start Game", fonts, 0,
-                                             pygame.Color("#646473"), pygame.Color("#FFFFFF"))
+        self.title_label = None
+        self.play_game_button = None
 
-    def run(self, screen):
+    def start(self):
+        self.title_label = UILabel(pygame.Rect((87, 40), (850, 178)), "Turret Warfare",
+                                   self.ui_manager, object_id="#game_title")
+
+        self.play_game_button = UIButton(pygame.Rect((437, 515), (150, 35)),
+                                         "Start Game", self.ui_manager,
+                                         tool_tip_text="<b>Click to Start.</b>")
+
+    def end(self):
+        self.title_label.kill()
+        self.play_game_button.kill()
+
+    def run(self, screen, time_delta):
         is_main_menu_and_index = [0, 0]
         for event in pygame.event.get():
             if event.type == QUIT:
                 is_main_menu_and_index[0] = 2
                 
-            self.play_game_button.handle_input_event(event)
+            self.ui_manager.process_events(event)
               
-            if event.type == QUIT:
-                is_main_menu_and_index[0] = 2
+            if event.type == pygame.USEREVENT:
+                if event.user_type == "ui_button_pressed":
+                    if event.ui_element == self.play_game_button:
+                        is_main_menu_and_index[0] = 1
 
-        self.play_game_button.update()
+        self.ui_manager.update(time_delta)
 
-        if self.play_game_button.was_pressed():
-            is_main_menu_and_index[0] = 1
-                    
-        screen.blit(self.backgroundImage, (0, 0))  # draw the background
-        screen.blit(self.title_text_render, self.title_text_render_rect)
+        screen.blit(self.background_image, (0, 0))  # draw the background
 
-        self.play_game_button.draw(screen)
+        self.ui_manager.draw_ui(screen)
 
         return is_main_menu_and_index

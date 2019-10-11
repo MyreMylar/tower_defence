@@ -1,0 +1,40 @@
+{
+  "defaults":
+  {
+    "colours":
+    {
+      "normal_bg": "#606060",
+      "hovered_bg": "#707070"
+    }
+  },
+
+  "#game_title":
+  {
+    "colours":
+    {
+      "normal_text": "#000000",
+      "dark_bg": "#FFFFFF00"
+    },
+    "font":
+    {
+      "name": "londrina_shadow",
+      "size": "150",
+      "regular_path": "data/LondrinaShadow-Regular.ttf"
+    }
+  },
+
+  "#game_sub_title":
+  {
+    "colours":
+    {
+      "normal_text": "#000000",
+      "dark_bg": "#FFFFFF00"
+    },
+    "font":
+    {
+      "name": "londrina_shadow",
+      "size": "32",
+      "regular_path": "data/LondrinaShadow-Regular.ttf"
+    }
+  }
+}
