@@ -3,6 +3,7 @@ from collections import deque
 import pygame
 from pygame.locals import *
 from pygame_gui import UIManager
+from pygame_gui.elements import UILabel
 
 from tiled_levels.tiled_level import TiledLevel
 from tiled_levels.map_editor import MapEditor
@@ -82,6 +83,9 @@ def main():
     background.fill((95, 140, 95))
 
     ui_manager = UIManager(screen.get_size(), "data/ui_theme.json")
+    fps_counter_label = None
+    wave_display_label = None
+    count_down_message_label = None
 
     static_sprite_surface = pygame.Surface(screen.get_size())
     should_redraw_static_sprites = True
@@ -216,6 +220,9 @@ def main():
             is_play_game = True
             restart_game = True
             should_redraw_static_sprites = True
+            fps_counter_label = UILabel(pygame.Rect((900, 10), (100, 40)),
+                                        "0 FPS", manager=ui_manager, object_id="#screen_text")
+
         elif is_map_editor:
             should_redraw_static_sprites = True
             screen_data.set_editor_active()
@@ -230,11 +237,27 @@ def main():
                     count_down_message = "First wave in " + str(int(setup_time - setup_accumulator)) + " seconds"
                     should_show_count_down_message = True
                     setup_accumulator += time_delta
+
+                    if count_down_message_label is None:
+                        count_down_message_label_rect = pygame.Rect((400, 10), (250, 40))
+                        count_down_message_label_rect.centerx = screen_data.screen_size[0] / 2
+                        count_down_message_label_rect.centery = 24
+                        count_down_message_label = UILabel(count_down_message_label_rect,
+                                                           count_down_message, manager=ui_manager,
+                                                           object_id="#screen_text")
                 else:
                     setup_accumulator += time_delta
                     remaining_time = str(int(setup_time - setup_accumulator))
                     count_down_message = "Setup Time remaining: " + remaining_time + " seconds"
                     should_show_count_down_message = True
+
+                    if count_down_message_label is None:
+                        count_down_message_label_rect = pygame.Rect((400, 10), (250, 40))
+                        count_down_message_label_rect.centerx = screen_data.screen_size[0] / 2
+                        count_down_message_label_rect.centery = 24
+                        count_down_message_label = UILabel(count_down_message_label_rect,
+                                                           count_down_message, manager=ui_manager,
+                                                           object_id="#screen_text")
             elif restart_game:
                 restart_game = False
 
@@ -266,17 +289,53 @@ def main():
                 active_upgrade_turret = None
                 upgrade_hud_active = False
                 should_show_count_down_message = False
+                if count_down_message_label is not None:
+                    count_down_message_label.kill()
+                    count_down_message_label = None
+
+                if wave_display_label is not None:
+                    wave_display_label.kill()
+                    wave_display_label = None
+
                 display_normal_hud(hud_buttons, hud_sprites, turret_costs, screen_data, fonts, image_atlas)
                 
             elif is_game_over:
                 should_show_count_down_message = False
+                if count_down_message_label is not None:
+                    count_down_message_label.kill()
+                    count_down_message_label = None
             else:
                 monster_wave_spawner.update(time_delta, tiled_level.position_offset)
+                if wave_display_label is not None:
+                    wave_display_label.kill()
+                    wave_display_label = None
+
                 if monster_wave_spawner.should_show_wave_countdown:
                     should_show_count_down_message = True
                     count_down_message = monster_wave_spawner.count_down_message
+
+                    if count_down_message_label is None:
+                        count_down_message_label_rect = pygame.Rect((400, 10), (250, 40))
+                        count_down_message_label_rect.centerx = screen_data.screen_size[0] / 2
+                        count_down_message_label_rect.centery = 24
+                        count_down_message_label = UILabel(count_down_message_label_rect,
+                                                           count_down_message, manager=ui_manager,
+                                                           object_id="#screen_text")
                 else:
                     should_show_count_down_message = False
+                    if count_down_message_label is not None:
+                        count_down_message_label.kill()
+                        count_down_message_label = None
+
+                    if wave_display_label is None:
+                        current_wave = str(monster_wave_spawner.current_wave_number)
+                        max_wave = str(monster_wave_spawner.maximum_wave_number)
+                        wave_display_label_rect = pygame.Rect((400, 10), (100, 40))
+                        wave_display_label_rect.centerx = screen_data.screen_size[0] / 2
+                        wave_display_label_rect.centery = 24
+                        wave_display_label = UILabel(wave_display_label_rect,
+                                                     "Wave " + current_wave + "/" + max_wave,
+                                                     manager=ui_manager, object_id="#screen_text")
 
             if player_resources.current_base_health <= 0:
                 is_game_over = True
@@ -491,7 +550,7 @@ def main():
             screen.blit(health_text_render, health_text_render.get_rect(centerx=health_text_pos[0],
                                                                         centery=health_text_pos[1]))
 
-            if time_delta > 0.0:
+            if time_delta > 0.0 and fps_counter_label is not None:
                 if len(frame_rates) < 300:
                     frame_rates.append(1.0/time_delta)
                 else:
@@ -499,23 +558,17 @@ def main():
                     frame_rates.append(1.0/time_delta)
                     
                 fps = sum(frame_rates)/len(frame_rates)
-                fps_text_render = fonts[3].render("FPS: " + "{:.2f}".format(fps), True, pygame.Color("#FFFFFF"))
-                screen.blit(fps_text_render, fps_text_render.get_rect(centerx=screen_data.hud_dimensions[0] * 0.9,
-                                                                      centery=24))
 
-            if should_show_count_down_message:
-                count_down_text_render = fonts[3].render(count_down_message, True, pygame.Color("#FFFFFF"))
-                screen.blit(count_down_text_render,
-                            count_down_text_render.get_rect(centerx=screen_data.screen_size[0]/2,
-                                                            centery=24))
-            elif not is_setup and not is_game_over:
+                fps_counter_label.set_text("FPS: {:.2f}".format(fps))
+
+            if should_show_count_down_message and count_down_message_label is not None:
+                count_down_message_label.set_text(count_down_message)
+
+            if wave_display_label is not None and monster_wave_spawner.has_changed_wave:
                 current_wave = str(monster_wave_spawner.current_wave_number)
                 max_wave = str(monster_wave_spawner.maximum_wave_number)
-                wave_number_text_render = fonts[3].render("Wave " + current_wave + "/" + max_wave,
-                                                          True, pygame.Color("#FFFFFF"))
-                screen.blit(wave_number_text_render,
-                            wave_number_text_render.get_rect(centerx=screen_data.screen_size[0] / 2, centery=24))
-            
+                wave_display_label.set_text("Wave " + current_wave + "/" + max_wave)
+
             if is_game_over:
                 win_message_text_render = fonts[4].render(win_message, True, pygame.Color("#FFFFFF"))
                 win_message_text_render_rect = win_message_text_render.get_rect(centerx=x_screen_size/2,

@@ -33,8 +33,29 @@
     "font":
     {
       "name": "londrina_shadow",
-      "size": "32",
+      "size": "50",
       "regular_path": "data/LondrinaShadow-Regular.ttf"
+    }
+  },
+
+  "#screen_text":
+  {
+    "colours":
+    {
+      "normal_text": "#FFFFFF",
+      "dark_bg": "#00000000",
+      "text_shadow": "#505050"
+    },
+    "font":
+    {
+      "name": "just_another_hand",
+      "size": "32",
+      "regular_path": "data/JustAnotherHand.ttf"
+    },
+    "misc":
+    {
+      "text_shadow": "1",
+      "text_shadow_size": "1"
     }
   }
 }

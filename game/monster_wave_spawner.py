@@ -69,6 +69,8 @@ class MonsterWaveSpawner:
         self.current_sub_wave = 1
 
         self.cheapest_point_monster = 1000000000
+
+        self.changed_wave = False
         
     def update(self, time_delta, offset):
         self.screen_offset = offset
@@ -106,6 +108,7 @@ class MonsterWaveSpawner:
                 self.wave_points = self.initial_wave_points + self.point_increase_per_wave
 
     def spawn_new_wave(self):
+        self.changed_wave = True
         self.current_wave_number += 1
         self.available_monsters_for_wave[:] = []
         point_cost_of_cheapest_available_monster = 1000000000
@@ -167,3 +170,8 @@ class MonsterWaveSpawner:
                                             self.screen_offset, self.collision_grid, self.splat_loader)
         
         return new_monster
+
+    def has_changed_wave(self) -> bool:
+        if self.changed_wave:
+            self.changed_wave = False
+            return True

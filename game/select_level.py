@@ -32,7 +32,7 @@ class SelectLevelMenu:
    
         self.background_image = pygame.image.load("images/menu_background.png").convert()
 
-        self.title_label = UILabel(pygame.Rect((300, 25), (200, 40)), "Select Level",
+        self.title_label = UILabel(pygame.Rect((400, 25), (229, 60)), "Select Level",
                                    self.ui_manager, object_id="#game_sub_title")
 
         self.play_game_button = UIButton(pygame.Rect((437, 515), (150, 35)),
