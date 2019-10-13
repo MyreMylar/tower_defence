@@ -8,6 +8,14 @@
     }
   },
 
+  "tool_tip":
+  {
+    "colours":
+    {
+      "dark_bg": "#15191eCC"
+    }
+  },
+
   "#game_title":
   {
     "colours":
@@ -57,5 +65,160 @@
       "text_shadow": "1",
       "text_shadow_size": "1"
     }
+  },
+
+  "#small_screen_text":
+  {
+    "colours":
+    {
+      "normal_text": "#FFFFFF",
+      "dark_bg": "#00000000",
+      "text_shadow": "#505050"
+    },
+    "font":
+    {
+      "name": "just_another_hand",
+      "size": "20"
+    },
+    "misc":
+    {
+      "text_shadow": "1",
+      "text_shadow_size": "1"
+    }
+  },
+
+  "#win_message_text":
+  {
+    "colours":
+    {
+      "normal_text": "#FFFFFF",
+      "dark_bg": "#00000000",
+      "text_shadow": "#505050"
+    },
+    "font":
+    {
+      "name": "just_another_hand",
+      "size": "64",
+      "regular_path": "data/JustAnotherHand.ttf"
+    },
+    "misc":
+    {
+      "text_shadow": "1",
+      "text_shadow_size": "1"
+    }
+  },
+
+  "#gun_turret_button":
+  {
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "0,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "0,448,64,64"
+      }
+    }
+  },
+  "#flame_turret_button":
+  {
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "64,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "64,448,64,64"
+      }
+    }
+  },
+  "#missile_turret_button":
+  {
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "128,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "128,448,64,64"
+      }
+    }
+  },
+  "#slow_turret_button":
+  {
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "192,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "192,448,64,64"
+      }
+    }
+  },
+  "#laser_turret_button":
+  {
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "256,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "256,448,64,64"
+      }
+    }
+  },
+  "#upgrade_button":
+  {
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "384,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "384,448,64,64"
+      }
+    }
+  },
+  "#sell_button":
+  {
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "448,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "448,448,64,64"
+      }
+    }
   }
+
 }

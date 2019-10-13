@@ -4,10 +4,13 @@ import pygame_gui
 from pygame_gui.elements.ui_button import UIButton
 from pygame_gui.elements.ui_label import UILabel
 
+from .base_app_state import BaseAppState
 
-class MainMenu:
 
-    def __init__(self, ui_manager: pygame_gui.UIManager):
+class MainMenu(BaseAppState):
+
+    def __init__(self, ui_manager: pygame_gui.UIManager, state_manger):
+        super().__init__('main_menu', 'select_level', state_manger)
 
         self.ui_manager = ui_manager
         self.background_image = pygame.image.load("images/menu_background.png").convert()
@@ -27,23 +30,27 @@ class MainMenu:
         self.title_label.kill()
         self.play_game_button.kill()
 
-    def run(self, screen, time_delta):
-        is_main_menu_and_index = [0, 0]
+    def run(self, surface, time_delta):
         for event in pygame.event.get():
             if event.type == QUIT:
-                is_main_menu_and_index[0] = 2
+                self.set_target_state_name('quit')
+                self.trigger_transition()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.set_target_state_name('quit')
+                    self.trigger_transition()
                 
             self.ui_manager.process_events(event)
               
             if event.type == pygame.USEREVENT:
                 if event.user_type == "ui_button_pressed":
                     if event.ui_element == self.play_game_button:
-                        is_main_menu_and_index[0] = 1
+                        self.set_target_state_name('select_level')
+                        self.trigger_transition()
 
         self.ui_manager.update(time_delta)
 
-        screen.blit(self.background_image, (0, 0))  # draw the background
+        surface.blit(self.background_image, (0, 0))  # draw the background
 
-        self.ui_manager.draw_ui(screen)
-
-        return is_main_menu_and_index
+        self.ui_manager.draw_ui(surface)
