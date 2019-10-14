@@ -1,14 +1,17 @@
 import os
 import math
+
 import pygame
 from pygame.locals import *
-from game.ui_text_button import UTTextButton
+from pygame_gui.windows import UIMessageWindow
+from pygame_gui.elements import UIButton, UILabel
+
 from tiled_levels.tile import Tile
-from tiled_levels.map_editor_instructions_window import MapEditorInstructionsWindow
 
 
 class DrawableWaypointCircle:
-    def __init__(self, radius, position, fonts, order):
+    def __init__(self, radius, position, ui_manager, order):
+        self.ui_manager = ui_manager
         self.traversal_order = order
         self.radius = radius
         self.colour = pygame.Color("#FF6464")
@@ -27,15 +30,23 @@ class DrawableWaypointCircle:
         pygame.draw.rect(self.rectangle_surface, self.rectangle_colour, pygame.Rect(0, 0, 32, 32))
         self.rectangle_surface.set_alpha(100)
         self.position = [self.world_position[0], self.world_position[1]]
-        self.id_text = fonts[6].render(str(self.traversal_order), True, pygame.Color("#FFFFFF"))
+        # self.id_text = fonts[6].render(str(self.traversal_order), True, pygame.Color("#FFFFFF"))
+
+        self.id_text_label = UILabel(pygame.Rect(self.position, (32, 32)), str(self.traversal_order),
+                                     manager=self.ui_manager, object_id="#small_screen_text")
+
+    def kill(self):
+        self.id_text_label.kill()
 
     def update_offset_position(self, offset):
         self.position = [self.world_position[0]-offset[0], self.world_position[1]-offset[1]]
+        self.id_text_label.rect.x = self.position[0] + 16
+        self.id_text_label.rect.y = self.position[1] + 16
 
     def draw(self, screen):
         screen.blit(self.rectangle_surface, [self.position[0] + 16, self.position[1] + 16])
         screen.blit(self.surface, self.position)
-        screen.blit(self.id_text, self.id_text.get_rect(centerx=self.position[0] + 32, centery=self.position[1] + 32))
+        # screen.blit(self.id_text, self.id_text.get_rect(centerx=self.position[0] + 32, centery=self.position[1] + 32))
 
 
 class RemoveTurretSquareIcon(pygame.sprite.Sprite):
@@ -116,12 +127,12 @@ class PlayableAreaDisplay:
 
 
 class MapEditor:
-    def __init__(self, tiled_level, hud_rect, fonts, all_square_sprites):
-        self.fonts = fonts
+    def __init__(self, tiled_level, hud_rect, all_square_sprites, ui_manager):
         self.editing_layer = 0
         self.tiled_level = tiled_level
         self.hud_rect = hud_rect
         self.all_square_sprites = all_square_sprites
+        self.ui_manager = ui_manager
 
         self.current_levels = [file for file in os.listdir("data/levels/")
                                if os.path.isfile(os.path.join("data/levels/", file))]
@@ -175,17 +186,54 @@ class MapEditor:
         self.map_start_pos = self.tiled_level.find_player_start()
         self.map_position = [self.map_start_pos[0], self.map_start_pos[1]]
 
-        self.map_editor_instructions = MapEditorInstructionsWindow([362, 100, 300, 250], fonts)
-        self.playable_area_display = PlayableAreaDisplay()
+        # self.map_editor_instructions = MapEditorInstructionsWindow([362, 100, 300, 250], fonts)
+        instructions_message = ("Arrow keys to scroll map <br>"
+                                "Left mouse click to select tile from palette<br>"
+                                "Right mouse click to place tile<br>"
+                                "'>' and '<' to rotate selected tile<br>"
+                                "F5 or quit to save map<br>")
+        self.instruction_message_window = UIMessageWindow(pygame.Rect((362, 100), (300, 250)),
+                                                          "Instructions",
+                                                          instructions_message,
+                                                          self.ui_manager)
 
-        self.make_new_button = UTTextButton([900, self.hud_rect[1] + 10, 70, 20], "Make New", fonts, 6)
-        self.tile_set_button = UTTextButton([900, self.hud_rect[1] + 35, 70, 20], "Switch Tiles", fonts, 6)
+        self.level_name_label = UILabel(pygame.Rect((462, 8), (100, 34)), self.tiled_level.level_name,
+                                        self.ui_manager, object_id="#screen_text")
+
+        self.make_new_button = UIButton(pygame.Rect(870, self.hud_rect[1] + 24, 100, 20),
+                                        "Make New", self.ui_manager)
+
+        self.tile_set_button = UIButton(pygame.Rect(870, self.hud_rect[1] + 49, 100, 20),
+                                        "Switch Tiles", self.ui_manager)
+
+        self.playable_area_display = PlayableAreaDisplay()
 
         self.visible_way_point_circles = []
         self.refresh_visible_waypoint_circles()
 
+    def end(self):
+        if self.tile_set_button is not None:
+            self.tile_set_button.kill()
+            self.tile_set_button = None
+
+        if self.make_new_button is not None:
+            self.make_new_button.kill()
+            self.make_new_button = None
+
+        if self.level_name_label is not None:
+            self.level_name_label.kill()
+            self.level_name_label = None
+
+        if self.instruction_message_window is not None:
+            self.instruction_message_window.kill()
+            self.instruction_message_window = None
+
+        for circle in self.visible_way_point_circles:
+            circle.kill()
+
     def refresh_visible_waypoint_circles(self):
         for circle in self.visible_way_point_circles:
+            circle.kill()
             del circle
         self.visible_way_point_circles[:] = []
         traversal_order = 1
@@ -193,12 +241,12 @@ class MapEditor:
             self.visible_way_point_circles.append(
                 DrawableWaypointCircle(self.tiled_level.monster_walk_path.waypoint_radius,
                                        self.tiled_level.monster_walk_path.start_waypoint,
-                                       self.fonts, traversal_order))
+                                       self.ui_manager, traversal_order))
             traversal_order += 1
         for waypoint in self.tiled_level.monster_walk_path.waypoints:
             self.visible_way_point_circles.append(
                 DrawableWaypointCircle(self.tiled_level.monster_walk_path.waypoint_radius,
-                                       waypoint, self.fonts, traversal_order))
+                                       waypoint, self.ui_manager, traversal_order))
             traversal_order += 1
         
     def display_turret_placement_squares(self, screen):
@@ -267,64 +315,70 @@ class MapEditor:
     def run(self, screen, background, all_tile_sprites, hud_rect, time_delta):
         running = True
         for event in pygame.event.get():
-            if self.map_editor_instructions is not None:
-                self.map_editor_instructions.handle_input_event(event)
-            else:
-                self.make_new_button.handle_input_event(event)
-                self.tile_set_button.handle_input_event(event)
-                if event.type == QUIT:
+            self.ui_manager.process_events(event)
+
+            if event.type == USEREVENT:
+                if event.user_type == "ui_button_pressed":
+                    if event.ui_element == self.make_new_button:
+                        new_level_num = len(self.current_levels) + 1
+                        new_level_name = "Level " + str(new_level_num)
+                        self.tiled_level.change_level_name_and_save(new_level_name)
+                        self.level_name_label.set_text(self.tiled_level.level_name)
+                    elif event.ui_element == self.tile_set_button:
+                        self.tiled_level.toggle_tile_map()
+                        for tile in self.palette_tiles:
+                            tile.reload_tile_image_from_data(self.tiled_level.all_tile_data)
+
+            if event.type == QUIT:
+                self.tiled_level.save_tiles()
+                running = False
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    self.left_mouse_held = True
+                if event.button == 3:
+                    self.right_mouse_held = True
+            if event.type == MOUSEBUTTONUP:
+                if event.button == 1:
+                    self.left_mouse_held = False
+                if event.button == 3:
+                    self.right_mouse_held = False
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
                     self.tiled_level.save_tiles()
                     running = False
-                if event.type == MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        self.left_mouse_held = True
-                    if event.button == 3:
-                        self.right_mouse_held = True
-                if event.type == MOUSEBUTTONUP:
-                    if event.button == 1:
-                        self.left_mouse_held = False
-                    if event.button == 3:
-                        self.right_mouse_held = False
-                if event.type == KEYDOWN:                       
-                    if event.key == K_ESCAPE:
-                        self.tiled_level.save_tiles()
-                        running = False
-                    if event.key == K_F5:
-                        self.tiled_level.save_tiles()
-                    if event.key == K_PERIOD:
-                        self.rotate_selected_tile_right = True
-                    if event.key == K_COMMA:
-                        self.rotate_selected_tile_left = True
-                    if event.key == K_UP:
-                        self.up_scroll_held = True
-                    if event.key == K_DOWN:
-                        self.down_scroll_held = True
-                    if event.key == K_LEFT:
-                        self.left_scroll_held = True
-                    if event.key == K_RIGHT:
-                        self.right_scroll_held = True
-                    if event.key == K_1:
-                        self.editing_layer = 1
-                    if event.key == K_0:
-                        self.editing_layer = 0
-                    if event.key == K_RIGHTBRACKET:
-                        self.should_increase_palette_page = True
-                    if event.key == K_LEFTBRACKET:
-                        self.should_decrease_palette_page = True
-                if event.type == KEYUP:
-                    if event.key == K_UP:
-                        self.up_scroll_held = False
-                    if event.key == K_DOWN:
-                        self.down_scroll_held = False
-                    if event.key == K_LEFT:
-                        self.left_scroll_held = False
-                    if event.key == K_RIGHT:
-                        self.right_scroll_held = False
+                if event.key == K_F5:
+                    self.tiled_level.save_tiles()
+                if event.key == K_PERIOD:
+                    self.rotate_selected_tile_right = True
+                if event.key == K_COMMA:
+                    self.rotate_selected_tile_left = True
+                if event.key == K_UP:
+                    self.up_scroll_held = True
+                if event.key == K_DOWN:
+                    self.down_scroll_held = True
+                if event.key == K_LEFT:
+                    self.left_scroll_held = True
+                if event.key == K_RIGHT:
+                    self.right_scroll_held = True
+                if event.key == K_1:
+                    self.editing_layer = 1
+                if event.key == K_0:
+                    self.editing_layer = 0
+                if event.key == K_RIGHTBRACKET:
+                    self.should_increase_palette_page = True
+                if event.key == K_LEFTBRACKET:
+                    self.should_decrease_palette_page = True
+            if event.type == KEYUP:
+                if event.key == K_UP:
+                    self.up_scroll_held = False
+                if event.key == K_DOWN:
+                    self.down_scroll_held = False
+                if event.key == K_LEFT:
+                    self.left_scroll_held = False
+                if event.key == K_RIGHT:
+                    self.right_scroll_held = False
             
-        if self.map_editor_instructions is not None:
-            self.map_editor_instructions.update()
-            if self.map_editor_instructions.should_exit:
-                self.map_editor_instructions = None
+        self.ui_manager.update(time_delta)
 
         if self.should_increase_palette_page:
             self.should_increase_palette_page = False
@@ -451,29 +505,7 @@ class MapEditor:
             if self.held_tile_data[3]:
                 pygame.draw.rect(screen, pygame.Color("#FF6464"), self.held_tile_data[0], 1)
 
-        level_name_text_render = self.fonts[3].render(self.tiled_level.level_name, True, pygame.Color("#FFFFFF"))
-        screen.blit(level_name_text_render, level_name_text_render.get_rect(centerx=512, centery=24))
-
-        self.make_new_button.update()
-        self.tile_set_button.update()
-        
-        if self.make_new_button.was_pressed():
-            new_level_num = len(self.current_levels) + 1
-            new_level_name = "Level " + str(new_level_num)
-            self.tiled_level.change_level_name_and_save(new_level_name)
-
-        if self.tile_set_button.was_pressed():
-            self.tiled_level.toggle_tile_map()
-            for tile in self.palette_tiles:
-                tile.reload_tile_image_from_data(self.tiled_level.all_tile_data)
-            
-        self.make_new_button.draw(screen)
-        self.tile_set_button.draw(screen)
-
-        if self.map_editor_instructions is not None:
-            self.map_editor_instructions.draw(screen)
-
-        pygame.display.flip()  # flip all our drawn stuff onto the screen
+        self.ui_manager.draw_ui(screen)
 
         return running
 

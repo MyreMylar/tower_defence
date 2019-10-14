@@ -1,3 +1,5 @@
+import os
+
 import pygame
 from pygame_gui import UIManager
 
@@ -19,9 +21,13 @@ class ScreenData:
     def set_editor_active(self):
         self.play_area = [self.screen_size[0], self.screen_size[1] - self.editor_hud_dimensions[1]]
 
+    def set_editor_inactive(self):
+        self.play_area = [self.screen_size[0], self.screen_size[1] - self.hud_dimensions[1]]
+
 
 def main():
     pygame.init()
+    os.environ['SDL_VIDEO_CENTERED'] = '1'
     pygame.key.set_repeat()
     x_screen_size = 1024
     y_screen_size = 600
@@ -39,7 +45,7 @@ def main():
     MainMenu(ui_manager, app_state_manager)
     SelectLevelMenu(ui_manager, app_state_manager)
     GameState(ui_manager, screen, screen_data, app_state_manager)
-    EditorState(ui_manager,screen, screen_data, app_state_manager)
+    EditorState(ui_manager, screen, screen_data, app_state_manager)
     QuitState(app_state_manager)
     app_state_manager.set_initial_state('main_menu')
 

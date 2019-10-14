@@ -41,27 +41,10 @@ class EditorState(BaseAppState):
         self.editor_hud_rect = None
 
     def start(self):
-        # hud_rect = pygame.Rect(0, y_screen_size - 128, x_screen_size, 128)
         self.editor_hud_rect = pygame.Rect(0,
                                            self.screen_data.screen_size[1] - self.screen_data.editor_hud_dimensions[1],
                                            self.screen_data.editor_hud_dimensions[0],
                                            self.screen_data.editor_hud_dimensions[1])
-
-        font = pygame.font.Font(None, 32)
-        large_font = pygame.font.Font(None, 64)
-        title_font = pygame.font.Font("data/LondrinaShadow-Regular.ttf", 150)
-        fun_small_font = pygame.font.Font("data/JustAnotherHand.ttf", 32)
-        fun_large_font = pygame.font.Font("data/JustAnotherHand.ttf", 64)
-        fun_very_small_font = pygame.font.Font("data/JustAnotherHand.ttf", 20)
-        small_font = pygame.font.Font(None, 16)
-
-        self.fonts.append(font)
-        self.fonts.append(large_font)
-        self.fonts.append(title_font)
-        self.fonts.append(fun_small_font)
-        self.fonts.append(fun_large_font)
-        self.fonts.append(fun_very_small_font)
-        self.fonts.append(small_font)
 
         self.background = pygame.Surface(self.screen_surface.get_size())
         self.background = self.background.convert(self.screen_surface)
@@ -80,15 +63,29 @@ class EditorState(BaseAppState):
                                       self.image_atlas, self.monsters, self.screen_data,
                                       self.explosions_sprite_sheet)
         self.tiled_level.load_tiles()
-        self.tiled_level.update_offset_position(self.tiled_level.find_player_start(), self.all_tile_sprites)
 
-        self.editor = MapEditor(self.tiled_level, self.editor_hud_rect, self.fonts, self.all_square_sprites)
+        self.editor = MapEditor(self.tiled_level, self.editor_hud_rect,
+                                self.all_square_sprites, self.ui_manager)
+
+        self.screen_data.set_editor_active()
 
     def end(self):
-        pass
+        self.editor.end()
+        self.editor = None
+        self.tiled_level.clear()
+        self.tiled_level = None
+
+        self.all_tile_sprites.empty()
+        self.all_square_sprites.empty()
+        self.all_monster_sprites.empty()
+
+        self.screen_data.set_editor_inactive()
 
     def run(self, surface, time_delta):
         self.should_redraw_static_sprites = True
-        self.screen_data.set_editor_active()
-        self.editor.run(surface, self.background, self.all_tile_sprites,
-                        self.editor_hud_rect, time_delta)
+
+        running = self.editor.run(surface, self.background, self.all_tile_sprites,
+                                  self.editor_hud_rect, time_delta)
+
+        if not running:
+            self.trigger_transition()
