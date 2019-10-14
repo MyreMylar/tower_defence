@@ -1,6 +1,7 @@
 import math
 import pygame
 
+from game.base_monster import BaseMonster
 
 class Turret(pygame.sprite.Sprite):
     def __init__(self, initial_position, build_cost, initial_radius, turret_id, *groups):
@@ -122,7 +123,7 @@ class Turret(pygame.sprite.Sprite):
 
         return relative_angle
 
-    def calc_distance_to_target(self, target):
+    def calc_distance_to_target(self, target: BaseMonster):
         x_dist = self.position[0] - target.position[0]
         y_dist = self.position[1] - target.position[1]
         current_dist = math.sqrt((x_dist * x_dist) + (y_dist * y_dist))

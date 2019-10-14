@@ -17,6 +17,20 @@
     }
   },
 
+  "world_space_health_bar":
+  {
+    "colours":
+    {
+      "border": "#505050",
+      "unfilled_bar": "#CCCCCC",
+      "filled_bar": "#f4251b"
+    },
+    "misc":
+    {
+      "border_width": "1"
+    }
+  },
+
   "#game_title":
   {
     "colours":

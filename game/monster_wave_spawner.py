@@ -18,7 +18,7 @@ class MonsterType:
 class MonsterWaveSpawner:
 
     def __init__(self, monsters, monster_walk_path, initial_wave_points,
-                 all_monster_sprites, image_atlas, collision_grid, splat_loader):
+                 all_monster_sprites, image_atlas, collision_grid, splat_loader, ui_manager):
         self.monsters = monsters
         self.monster_walk_path = monster_walk_path
         self.current_wave_number = 0
@@ -28,6 +28,7 @@ class MonsterWaveSpawner:
         self.point_increase_per_wave = 0
         self.wave_points = initial_wave_points
         self.splat_loader = splat_loader
+        self.ui_manager = ui_manager
         self.image_atlas = image_atlas
         self.screen_offset = [0, 0]
 
@@ -138,36 +139,37 @@ class MonsterWaveSpawner:
         if monster_type.id == StandardMonster.monster_id:
             new_monster = StandardMonster(self.monster_walk_path, self.monster_image_dict,
                                           self.all_monster_point_list, self.all_monster_sprites,
-                                          self.screen_offset, self.collision_grid, self.splat_loader)
+                                          self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
         if monster_type.id == ToughMonster.monster_id:
             new_monster = ToughMonster(self.monster_walk_path, self.monster_image_dict,
                                        self.all_monster_point_list, self.all_monster_sprites,
-                                       self.screen_offset, self.collision_grid, self.splat_loader)
+                                       self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
         if monster_type.id == FastMonster.monster_id:
             new_monster = FastMonster(self.monster_walk_path, self.monster_image_dict,
                                       self.all_monster_point_list, self.all_monster_sprites,
-                                      self.screen_offset, self.collision_grid, self.splat_loader)
+                                      self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
         if monster_type.id == BulletproofMonster.monster_id:
             new_monster = BulletproofMonster(self.monster_walk_path, self.monster_image_dict,
                                              self.all_monster_point_list,
                                              self.all_monster_sprites,
-                                             self.screen_offset, self.collision_grid, self.splat_loader)
+                                             self.screen_offset, self.collision_grid,
+                                             self.splat_loader, self.ui_manager)
         if monster_type.id == LargeMonster.monster_id:
             new_monster = LargeMonster(self.monster_walk_path, self.monster_image_dict,
                                        self.all_monster_point_list, self.all_monster_sprites,
-                                       self.screen_offset, self.collision_grid, self.splat_loader)
+                                       self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
         if monster_type.id == FireproofMonster.monster_id:
             new_monster = FireproofMonster(self.monster_walk_path, self.monster_image_dict,
                                            self.all_monster_point_list, self.all_monster_sprites,
-                                           self.screen_offset, self.collision_grid, self.splat_loader)
+                                           self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
         if monster_type.id == FastToughMonster.monster_id:
             new_monster = FastToughMonster(self.monster_walk_path, self.monster_image_dict,
                                            self.all_monster_point_list, self.all_monster_sprites,
-                                           self.screen_offset, self.collision_grid, self.splat_loader)
+                                           self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
         if monster_type.id == LargeToughMonster.monster_id:
             new_monster = LargeToughMonster(self.monster_walk_path, self.monster_image_dict,
                                             self.all_monster_point_list, self.all_monster_sprites,
-                                            self.screen_offset, self.collision_grid, self.splat_loader)
+                                            self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
         
         return new_monster
 

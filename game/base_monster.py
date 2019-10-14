@@ -1,6 +1,8 @@
 import math
 import random
+
 import pygame
+from pygame_gui.elements import UIWorldSpaceHealthBar
 
 from game.splat import Splat
 from collision.collision_shapes import CollisionCircle
@@ -18,7 +20,7 @@ class MonsterPath:
 class BaseMonster(pygame.sprite.Sprite):
 
     def __init__(self, monster_path, monster_id, loaded_image, point_cost, all_monster_sprites, offset, collision_grid,
-                 splat_loader, *groups):
+                 splat_loader, ui_manager, *groups):
         super().__init__(*groups)
         self.id = monster_id
         self.point_cost = point_cost
@@ -27,6 +29,7 @@ class BaseMonster(pygame.sprite.Sprite):
         self.monster_path = monster_path
         self.collision_grid = collision_grid
         self.splat_loader = splat_loader
+        self.ui_manager = ui_manager
         self.splat_image = None
         self.original_image = loaded_image
         self.image = self.original_image.copy()
@@ -88,9 +91,20 @@ class BaseMonster(pygame.sprite.Sprite):
         self.all_monster_sprites = all_monster_sprites
         self.all_monster_sprites.add(self)
 
-        self.health = 100
+        self.health_capacity = 100
+        self.current_health = self.health_capacity
 
         self.slow_down_percentage = 1.0
+
+        self.health_bar = UIWorldSpaceHealthBar(pygame.Rect((0, 0), (self.rect.width, 6)), self, self.ui_manager)
+
+    def set_starting_health(self, value):
+        self.health_capacity = value
+        self.current_health = self.health_capacity
+
+    def kill(self):
+        self.health_bar.kill()
+        super().kill()
 
     def setup_splat(self, colour):
         self.splat_image = self.splat_loader.create_random_coloured_splat(colour)
@@ -110,7 +124,7 @@ class BaseMonster(pygame.sprite.Sprite):
                 self.take_damage(explosion.damage)
 
     def update_movement_and_collision(self, time_delta, player_resources, offset, splat_sprites):
-        if self.health <= 0:
+        if self.current_health <= 0:
             self.should_die = True
             player_resources.current_cash += self.cash_value
        
@@ -162,7 +176,7 @@ class BaseMonster(pygame.sprite.Sprite):
         if self.should_die:
             self.collision_grid.remove_shape_from_grid(self.collision_shape)
             self.all_monster_sprites.remove(self)
-
+            self.kill()
             if self.splat_image is not None:
                 Splat(self.position, self.splat_image, splat_sprites)
             
@@ -195,7 +209,7 @@ class BaseMonster(pygame.sprite.Sprite):
         return self.move_speed
 
     def take_damage(self, damage):
-        self.health -= damage.amount
+        self.current_health -= damage.amount
 
     def set_slowdown(self, percentage):
         self.slow_down_percentage = percentage

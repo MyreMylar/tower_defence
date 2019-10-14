@@ -167,7 +167,8 @@ class GameState(BaseAppState):
         self.tiled_level.update_offset_position(self.tiled_level.find_player_start(), self.all_tile_sprites)
         self.monster_wave_spawner = MonsterWaveSpawner(self.monsters, self.tiled_level.monster_walk_path,
                                                        10, self.all_monster_sprites,
-                                                       self.image_atlas, self.collision_grid, self.splat_loader)
+                                                       self.image_atlas, self.collision_grid,
+                                                       self.splat_loader, self.ui_manager)
 
         self.is_play_game = True
         self.restart_game = True
@@ -332,7 +333,7 @@ class GameState(BaseAppState):
             self.setup_accumulator = 0.0
             self.monster_wave_spawner = MonsterWaveSpawner(self.monsters, self.tiled_level.monster_walk_path, 10,
                                                            self.all_monster_sprites, self.image_atlas,
-                                                           self.collision_grid, self.splat_loader)
+                                                           self.collision_grid, self.splat_loader, self.ui_manager)
             self.mouse_active_turret = None
             self.active_upgrade_turret = None
             self.upgrade_hud_active = False
