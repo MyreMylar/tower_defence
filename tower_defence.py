@@ -31,6 +31,9 @@ def main():
     screen_data = ScreenData([x_screen_size, 128], [x_screen_size, 184], [x_screen_size, y_screen_size])
 
     ui_manager = UIManager(screen.get_size(), "data/ui_theme.json")
+    ui_manager.preload_fonts([{'name': 'fira_code', 'point_size': 10, 'style': 'bold'},
+                              {'name': 'fira_code', 'point_size': 10, 'style': 'regular'},
+                              {'name': 'fira_code', 'point_size': 14, 'style': 'bold'}])
 
     app_state_manager = AppStateManager()
     MainMenu(ui_manager, app_state_manager)

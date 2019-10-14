@@ -12,6 +12,7 @@
   {
     "colours":
     {
+      "normal_text": "#FFFFFF",
       "dark_bg": "#15191eCC"
     }
   },
@@ -63,7 +64,8 @@
     "misc":
     {
       "text_shadow": "1",
-      "text_shadow_size": "1"
+      "text_shadow_size": "1",
+      "text_shadow_offset": "0,0"
     }
   },
 
