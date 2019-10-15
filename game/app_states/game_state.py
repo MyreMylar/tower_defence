@@ -3,7 +3,7 @@ from collections import deque
 import pygame
 import pygame_gui
 
-from pygame_gui.core import UIContainer
+from pygame_gui.core import UIWindow
 from pygame_gui.elements import UILabel
 from pygame_gui.elements import UIButton
 
@@ -28,6 +28,124 @@ class TurretCosts:
         self.missile = 400
         self.slow = 700
         self.laser = 500
+
+
+class HUDPanel(UIWindow):
+    def __init__(self, rect: pygame.Rect, manager: 'pygame_gui.ui_manager.UIManager',
+                 player_resources: PlayerResources, turret_costs: TurretCosts):
+        super().__init__(rect, manager)
+        self.player_resources = player_resources
+        self.turret_costs = turret_costs
+
+        self.image = pygame.Surface(self.rect.size, flags=pygame.SRCALPHA)
+        self.image.fill(pygame.Color("#646464"))
+
+        self.health_label = UILabel(pygame.Rect((900, 30), (100, 40)),
+                                    "Health: " + "{:,}".format(self.player_resources.current_base_health),
+                                    manager=self.ui_manager,
+                                    container=self.get_container(),
+                                    object_id="#screen_text")
+
+        self.cash_label = UILabel(pygame.Rect((900, 60), (100, 40)),
+                                  "£" + "{:,}".format(self.player_resources.current_cash),
+                                  manager=self.ui_manager,
+                                  container=self.get_container(),
+                                  object_id="#screen_text")
+
+        self.clearable_hud_elements = []
+
+    def update(self, time_delta: float):
+        self.cash_label.set_text("£" + "{:,}".format(self.player_resources.current_cash))
+        self.health_label.set_text("Health: " + "{:,}".format(self.player_resources.current_base_health))
+
+    def display_normal_hud(self):
+
+        for element in self.clearable_hud_elements:
+            element.kill()
+
+        self.clearable_hud_elements.clear()
+
+        self.clearable_hud_elements.append(
+            UIButton(pygame.Rect(32, 32, 64, 64), "",
+                     manager=self.ui_manager, container=self.get_container(), object_id="#gun_turret_button",
+                     tool_tip_text="<font size=2><b>Gun Turret</b><br><br>"
+                                   "A turret that fires a pair of low damage bullets at enemies in range. Has a"
+                                   " fairly rapid rate of fire.</font>"))
+        self.clearable_hud_elements.append(
+            UIButton(pygame.Rect(128, 32, 64, 64), "",
+                     manager=self.ui_manager, container=self.get_container(), object_id="#missile_turret_button",
+                     tool_tip_text="<font size=2><b>Missile Turret</b><br><br>"
+                                   "A slow firing, large range turret that launches homing missiles. Missiles do high "
+                                   "damage.</font>"))
+        self.clearable_hud_elements.append(
+            UIButton(pygame.Rect(224, 32, 64, 64), "",
+                     manager=self.ui_manager, container=self.get_container(), object_id="#flame_turret_button",
+                     tool_tip_text="<font size=2><b>Flame Turret</b><br><br>"
+                                   "Short range turret that fires a continuous cone of flame."
+                                   " The flames do damage while an enemy is within the cone. "
+                                   "Works well when enemies have to walk directly at the "
+                                   "turret.</font>"))
+        self.clearable_hud_elements.append(
+            UIButton(pygame.Rect(320, 32, 64, 64), "",
+                     manager=self.ui_manager, container=self.get_container(), object_id="#slow_turret_button",
+                     tool_tip_text="<font size=2><b>Slow Turret</b><br><br>"
+                                   "This turret uses time warping fields to slow down"
+                                   " all enemies within its radius. Works "
+                                   "well to multiply the damage done by nearby turrets.</font>"))
+        self.clearable_hud_elements.append(
+            UIButton(pygame.Rect(416, 32, 64, 64), "",
+                     manager=self.ui_manager, container=self.get_container(), object_id="#laser_turret_button",
+                     tool_tip_text="<font size=2><b>Laser Turret</b><br><br>"
+                                   "This turret fires a continuous laser beam at a single target."
+                                   " Useful for dealing with armoured targets that resist other "
+                                   "types of damage.</font>"))
+        self.clearable_hud_elements.append(
+            UILabel(pygame.Rect((32, 96), (64, 32)),
+                    "£ " + str(self.turret_costs.gun),
+                    manager=self.ui_manager, container=self.get_container(), object_id="#small_screen_text"))
+        self.clearable_hud_elements.append(
+            UILabel(pygame.Rect((128, 96), (64, 32)),
+                    "£ " + str(self.turret_costs.missile),
+                    manager=self.ui_manager, container=self.get_container(), object_id="#small_screen_text"))
+        self.clearable_hud_elements.append(
+            UILabel(pygame.Rect((224, 96), (64, 32)),
+                    "£ " + str(self.turret_costs.flamer),
+                    manager=self.ui_manager, container=self.get_container(), object_id="#small_screen_text"))
+        self.clearable_hud_elements.append(
+            UILabel(pygame.Rect((320, 96), (64, 32)),
+                    "£ " + str(self.turret_costs.slow),
+                    manager=self.ui_manager, container=self.get_container(), object_id="#small_screen_text"))
+        self.clearable_hud_elements.append(
+            UILabel(pygame.Rect((416, 96), (64, 32)),
+                    "£ " + str(self.turret_costs.laser),
+                    manager=self.ui_manager, container=self.get_container(), object_id="#small_screen_text"))
+
+    def display_upgrade_hud(self, upgrade_turret):
+
+        for element in self.clearable_hud_elements:
+            element.kill()
+
+        self.clearable_hud_elements.clear()
+
+        self.clearable_hud_elements.append(
+            UIButton(pygame.Rect(32, 32, 64, 64), "",
+                     manager=self.ui_manager, container=self.get_container(), object_id="#upgrade_button",
+                     tool_tip_text="<font size=2><b>Upgrade Turret</b><br><br>"
+                                   "Upgrades the selected turret to the next level."
+                                   " Turrets have three levels.</font>"))
+        self.clearable_hud_elements.append(
+            UIButton(pygame.Rect(128, 32, 64, 64), "",
+                     manager=self.ui_manager, container=self.get_container(), object_id="#sell_button",
+                     tool_tip_text="<font size=2><b>Sell Turret</b><br><br>"
+                                   "Sells the selected turret for half of the cost of building it.</font>"))
+        self.clearable_hud_elements.append(
+            UILabel(pygame.Rect((32, 96), (64, 32)),
+                    "£ " + str(upgrade_turret.get_upgrade_cost()),
+                    manager=self.ui_manager, container=self.get_container(), object_id="#small_screen_text"))
+        self.clearable_hud_elements.append(
+            UILabel(pygame.Rect((128, 96), (64, 32)),
+                    "£ " + str(upgrade_turret.get_sell_value()),
+                    manager=self.ui_manager, container=self.get_container(), object_id="#small_screen_text"))
 
 
 class GameState(BaseAppState):
@@ -61,7 +179,7 @@ class GameState(BaseAppState):
         self.should_show_count_down_message = False
         self.upgrade_hud_active = False
 
-        self.hud_container = None
+        self.hud_panel = None
 
         # labels
         self.fps_counter_label = None
@@ -95,7 +213,6 @@ class GameState(BaseAppState):
         self.all_bullet_sprites = None
         self.all_explosion_sprites = None
         self.splat_sprites = None
-        self.hud_sprites = None
 
         # images
         self.explosions_sprite_sheet = None
@@ -115,7 +232,6 @@ class GameState(BaseAppState):
     def start(self):
         self.hud_rect = pygame.Rect(0, self.screen_data.screen_size[1] - 128,
                                     self.screen_data.screen_size[0], 128)
-        self.hud_container = UIContainer(self.hud_rect, self.ui_manager)
 
         self.player_resources = PlayerResources()
 
@@ -132,7 +248,6 @@ class GameState(BaseAppState):
         self.all_bullet_sprites = pygame.sprite.Group()
         self.all_explosion_sprites = pygame.sprite.Group()
         self.splat_sprites = pygame.sprite.Group()
-        self.hud_sprites = pygame.sprite.Group()
 
         self.explosions_sprite_sheet = pygame.image.load("images/explosions.png").convert_alpha()
         self.image_atlas = pygame.image.load("images/image_atlas.png").convert_alpha()
@@ -144,14 +259,6 @@ class GameState(BaseAppState):
                                          "0 FPS", manager=self.ui_manager, object_id="#screen_text")
 
         self.wave_display_label = None
-
-        self.health_label = UILabel(pygame.Rect((900, 500), (100, 40)),
-                                    "Health: " + "{:,}".format(self.player_resources.current_base_health),
-                                    manager=self.ui_manager, object_id="#screen_text")
-
-        self.cash_label = UILabel(pygame.Rect((900, 530), (100, 40)),
-                                  "£" + "{:,}".format(self.player_resources.current_cash),
-                                  manager=self.ui_manager, object_id="#screen_text")
 
         grid_size = 64
         screen_filling_number_of_grid_squares = [int(self.screen_data.screen_size[0] / grid_size),
@@ -174,6 +281,9 @@ class GameState(BaseAppState):
         self.restart_game = True
         self.should_redraw_static_sprites = True
 
+        self.hud_panel = HUDPanel(self.hud_rect, self.ui_manager,
+                                  self.player_resources, self.turret_costs)
+
     def end(self):
         if self.fps_counter_label is not None:
             self.fps_counter_label.kill()
@@ -187,17 +297,9 @@ class GameState(BaseAppState):
             self.wave_display_label.kill()
             self.wave_display_label = None
 
-        if self.hud_container is not None:
-            self.hud_container.kill()
-            self.hud_container = None
-
-        if self.health_label is not None:
-            self.health_label.kill()
-            self.health_label = None
-
-        if self.cash_label is not None:
-            self.cash_label.kill()
-            self.cash_label = None
+        if self.hud_panel is not None:
+            self.hud_panel.kill()
+            self.hud_panel = None
 
         if self.win_message_label is not None:
             self.win_message_label.kill()
@@ -207,72 +309,13 @@ class GameState(BaseAppState):
             self.play_again_message_label.kill()
             self.play_again_message_label = None
 
-    def display_normal_hud(self):
+        for sprite in self.all_monster_sprites.sprites():
+            sprite.kill()
 
-        if self.hud_container is not None:
-            self.hud_container.clear()
-
-        UIButton(pygame.Rect(32, 32, 64, 64), "",
-                 manager=self.ui_manager, container=self.hud_container, object_id="#gun_turret_button",
-                 tool_tip_text="<font size=2><b>Gun Turret</b><br><br>"
-                               "A turret that fires a pair of low damage bullets at enemies in range. Has a"
-                               " fairly rapid rate of fire.</font>")
-        UIButton(pygame.Rect(128, 32, 64, 64), "",
-                 manager=self.ui_manager, container=self.hud_container, object_id="#missile_turret_button",
-                 tool_tip_text="<font size=2><b>Missile Turret</b><br><br>"
-                               "A slow firing, large range turret that launches homing missiles. Missiles do high "
-                               "damage.</font>")
-        UIButton(pygame.Rect(224, 32, 64, 64), "",
-                 manager=self.ui_manager, container=self.hud_container, object_id="#flame_turret_button",
-                 tool_tip_text="<font size=2><b>Flame Turret</b><br><br>"
-                               "Short range turret that fires a continuous cone of flame. The flames do damage while "
-                               "an enemy is within the cone. Works well when enemies have to walk directly at the "
-                               "turret.</font>")
-        UIButton(pygame.Rect(320, 32, 64, 64), "",
-                 manager=self.ui_manager, container=self.hud_container, object_id="#slow_turret_button",
-                 tool_tip_text="<font size=2><b>Slow Turret</b><br><br>"
-                               "This turret uses time warping fields to slow down all enemies within its radius. Works "
-                               "well to multiply the damage done by nearby turrets.</font>")
-        UIButton(pygame.Rect(416, 32, 64, 64), "",
-                 manager=self.ui_manager, container=self.hud_container, object_id="#laser_turret_button",
-                 tool_tip_text="<font size=2><b>Laser Turret</b><br><br>"
-                               "This turret fires a continuous laser beam at a single target. Useful for dealing with "
-                               "armoured targets that resist other types of damage.</font>")
-
-        UILabel(pygame.Rect((32, 96), (64, 32)),
-                "£ " + str(self.turret_costs.gun),
-                manager=self.ui_manager, container=self.hud_container, object_id="#small_screen_text")
-        UILabel(pygame.Rect((128, 96), (64, 32)),
-                "£ " + str(self.turret_costs.missile),
-                manager=self.ui_manager, container=self.hud_container, object_id="#small_screen_text")
-        UILabel(pygame.Rect((224, 96), (64, 32)),
-                "£ " + str(self.turret_costs.flamer),
-                manager=self.ui_manager, container=self.hud_container, object_id="#small_screen_text")
-        UILabel(pygame.Rect((320, 96), (64, 32)),
-                "£ " + str(self.turret_costs.slow),
-                manager=self.ui_manager, container=self.hud_container, object_id="#small_screen_text")
-        UILabel(pygame.Rect((416, 96), (64, 32)),
-                "£ " + str(self.turret_costs.laser),
-                manager=self.ui_manager, container=self.hud_container, object_id="#small_screen_text")
-
-    def display_upgrade_hud(self):
-        if self.hud_container is not None:
-            self.hud_container.clear()
-        UIButton(pygame.Rect(32, 32, 64, 64), "",
-                 manager=self.ui_manager, container=self.hud_container, object_id="#upgrade_button",
-                 tool_tip_text="<font size=2><b>Upgrade Turret</b><br><br>"
-                               "Upgrades the selected turret to the next level. Turrets have three levels.</font>")
-        UIButton(pygame.Rect(128, 32, 64, 64), "",
-                 manager=self.ui_manager, container=self.hud_container, object_id="#sell_button",
-                 tool_tip_text="<font size=2><b>Sell Turret</b><br><br>"
-                               "Sells the selected turret for half of the cost of building it.</font>")
-
-        UILabel(pygame.Rect((32, 96), (64, 32)),
-                "£ " + str(self.active_upgrade_turret.get_upgrade_cost()),
-                manager=self.ui_manager, container=self.hud_container, object_id="#small_screen_text")
-        UILabel(pygame.Rect((128, 96), (64, 32)),
-                "£ " + str(self.active_upgrade_turret.get_sell_value()),
-                manager=self.ui_manager, container=self.hud_container, object_id="#small_screen_text")
+        self.all_monster_sprites.empty()
+        self.all_turret_sprites.empty()
+        self.all_bullet_sprites.empty()
+        self.all_explosion_sprites.empty()
 
     def run(self, surface, time_delta):
 
@@ -317,7 +360,6 @@ class GameState(BaseAppState):
             self.monsters[:] = []
             self.hud_buttons[:] = []
 
-            self.hud_sprites.empty()
             self.all_monster_sprites.empty()
             self.all_turret_sprites.empty()
             self.all_bullet_sprites.empty()
@@ -327,6 +369,7 @@ class GameState(BaseAppState):
 
             # reset player resources
             self.player_resources = PlayerResources()
+            self.hud_panel.player_resources = self.player_resources
 
             self.is_game_over = False
             self.is_setup = True
@@ -354,7 +397,7 @@ class GameState(BaseAppState):
                 self.play_again_message_label.kill()
                 self.play_again_message_label = None
 
-            self.display_normal_hud()
+            self.hud_panel.display_normal_hud()
 
         elif self.is_game_over:
             self.should_show_count_down_message = False
@@ -484,7 +527,7 @@ class GameState(BaseAppState):
                                 self.active_upgrade_turret.upgrade()
                                 self.upgrade_hud_active = False
                                 self.active_upgrade_turret = None
-                                self.display_normal_hud()
+                                self.hud_panel.display_normal_hud()
                     elif event.ui_object_id == "#sell_button":
                         if self.active_upgrade_turret is not None:
                             self.player_resources.current_cash += self.active_upgrade_turret.get_sell_value()
@@ -494,7 +537,7 @@ class GameState(BaseAppState):
                             self.turrets.remove(self.active_upgrade_turret)
                             self.upgrade_hud_active = False
                             self.active_upgrade_turret = None
-                            self.display_normal_hud()
+                            self.hud_panel.display_normal_hud()
 
             if not self.is_game_over and event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 3:
@@ -503,7 +546,7 @@ class GameState(BaseAppState):
                         self.mouse_active_turret = None
                     if self.upgrade_hud_active:
                         self.upgrade_hud_active = False
-                        self.display_normal_hud()
+                        self.hud_panel.display_normal_hud()
                 if event.button == 1:
                     if self.mouse_active_turret is not None:
                         placed_turret = False
@@ -526,7 +569,7 @@ class GameState(BaseAppState):
                                 if turret.get_level() < turret.get_max_level():
                                     self.upgrade_hud_active = True
                                     self.active_upgrade_turret = turret
-                                    self.display_upgrade_hud()
+                                    self.hud_panel.display_upgrade_hud(self.active_upgrade_turret)
 
         if not self.is_game_over and self.mouse_active_turret is not None:
             is_over_square = False
@@ -593,11 +636,6 @@ class GameState(BaseAppState):
         for turret in self.turrets:
             if turret.show_radius:
                 turret.draw_radius_circle(surface)
-
-        pygame.draw.rect(surface, pygame.Color("#646464"), self.hud_rect, 0)  # draw the hud
-
-        self.cash_label.set_text("£" + "{:,}".format(self.player_resources.current_cash))
-        self.health_label.set_text("Health: " + "{:,}".format(self.player_resources.current_base_health))
 
         if time_delta > 0.0 and self.fps_counter_label is not None:
             if len(self.frame_rates) < 300:

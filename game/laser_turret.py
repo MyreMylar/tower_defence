@@ -43,9 +43,14 @@ class LaserTurret(Turret):
             laser_start_pos = [self.position[0] + self.current_vector[0] * 16,
                                self.position[1] + self.current_vector[1] * 16]
             self.target_distance = self.calc_distance_to_target(self.current_target)
-            results = self.calculate_aiming_vector(self.current_target, self.target_distance)
-            self.target_vector = results[0]
-            relative_angle_to_target = self.rotate_current_angle_to_target(time_delta)
+
+            x_dist = self.current_target.position[0] - self.position[0]
+            y_dist = self.current_target.position[1] - self.position[1]
+            self.current_vector[0] = x_dist/self.target_distance
+            self.current_vector[1] = y_dist/self.target_distance
+            # results = self.calculate_aiming_vector(self.current_target, self.target_distance)
+            # self.target_vector = results[0]
+            # relative_angle_to_target = self.rotate_current_angle_to_target(time_delta)
             self.active_beam.set_beam_data(laser_start_pos, self.current_vector, self.beam_colour)
 
     def upgrade(self):
