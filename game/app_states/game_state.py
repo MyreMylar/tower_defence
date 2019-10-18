@@ -37,8 +37,26 @@ class HUDPanel(UIWindow):
         self.player_resources = player_resources
         self.turret_costs = turret_costs
 
+        # create top edge shadow
+        top_edge_shadow_size = 4
+        border_size = 1
+        background_surface = pygame.Surface((self.rect.width,
+                                             self.rect.height - top_edge_shadow_size))
+        background_surface.fill(pygame.Color("#808080"))
+        background_surface.fill(pygame.Color("#646464"),
+                                pygame.Rect((border_size, border_size),
+                                            (self.rect.width - (border_size * 2),
+                                             self.rect.height - (border_size * 2) - top_edge_shadow_size)))
+        shadow = self.ui_manager.get_shadow((self.rect.width + 48, self.rect.height))
         self.image = pygame.Surface(self.rect.size, flags=pygame.SRCALPHA)
-        self.image.fill(pygame.Color("#646464"))
+        self.image.blit(shadow, (0, 0), area=pygame.Rect((24, 0), self.rect.size))
+        self.image.blit(background_surface, (0, top_edge_shadow_size))
+
+        self.get_container().relative_rect.width = self.rect.width
+        self.get_container().relative_rect.height = self.rect.height - top_edge_shadow_size
+        self.get_container().relative_rect.x = self.get_container().relative_rect.x
+        self.get_container().relative_rect.y = self.get_container().relative_rect.y + top_edge_shadow_size
+        self.get_container().update_containing_rect_position()
 
         self.health_label = UILabel(pygame.Rect((900, 30), (100, 40)),
                                     "Health: " + "{:,}".format(self.player_resources.current_base_health),
