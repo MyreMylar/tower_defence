@@ -84,19 +84,19 @@ class HUDPanel(UIWindow):
         self.clearable_hud_elements.clear()
 
         self.clearable_hud_elements.append(
-            UIButton(pygame.Rect(32, 32, 64, 64), "",
+            UIButton(pygame.Rect(32, 32, 66, 66), "",
                      manager=self.ui_manager, container=self.get_container(), object_id="#gun_turret_button",
                      tool_tip_text="<font size=2><b>Gun Turret</b><br><br>"
                                    "A turret that fires a pair of low damage bullets at enemies in range. Has a"
                                    " fairly rapid rate of fire.</font>"))
         self.clearable_hud_elements.append(
-            UIButton(pygame.Rect(128, 32, 64, 64), "",
+            UIButton(pygame.Rect(128, 32, 66, 66), "",
                      manager=self.ui_manager, container=self.get_container(), object_id="#missile_turret_button",
                      tool_tip_text="<font size=2><b>Missile Turret</b><br><br>"
                                    "A slow firing, large range turret that launches homing missiles. Missiles do high "
                                    "damage.</font>"))
         self.clearable_hud_elements.append(
-            UIButton(pygame.Rect(224, 32, 64, 64), "",
+            UIButton(pygame.Rect(224, 32, 66, 66), "",
                      manager=self.ui_manager, container=self.get_container(), object_id="#flame_turret_button",
                      tool_tip_text="<font size=2><b>Flame Turret</b><br><br>"
                                    "Short range turret that fires a continuous cone of flame."
@@ -104,14 +104,14 @@ class HUDPanel(UIWindow):
                                    "Works well when enemies have to walk directly at the "
                                    "turret.</font>"))
         self.clearable_hud_elements.append(
-            UIButton(pygame.Rect(320, 32, 64, 64), "",
+            UIButton(pygame.Rect(320, 32, 66, 66), "",
                      manager=self.ui_manager, container=self.get_container(), object_id="#slow_turret_button",
                      tool_tip_text="<font size=2><b>Slow Turret</b><br><br>"
                                    "This turret uses time warping fields to slow down"
                                    " all enemies within its radius. Works "
                                    "well to multiply the damage done by nearby turrets.</font>"))
         self.clearable_hud_elements.append(
-            UIButton(pygame.Rect(416, 32, 64, 64), "",
+            UIButton(pygame.Rect(416, 32, 66, 66), "",
                      manager=self.ui_manager, container=self.get_container(), object_id="#laser_turret_button",
                      tool_tip_text="<font size=2><b>Laser Turret</b><br><br>"
                                    "This turret fires a continuous laser beam at a single target."
@@ -146,13 +146,13 @@ class HUDPanel(UIWindow):
         self.clearable_hud_elements.clear()
 
         self.clearable_hud_elements.append(
-            UIButton(pygame.Rect(32, 32, 64, 64), "",
+            UIButton(pygame.Rect(32, 32, 66, 66), "",
                      manager=self.ui_manager, container=self.get_container(), object_id="#upgrade_button",
                      tool_tip_text="<font size=2><b>Upgrade Turret</b><br><br>"
                                    "Upgrades the selected turret to the next level."
                                    " Turrets have three levels.</font>"))
         self.clearable_hud_elements.append(
-            UIButton(pygame.Rect(128, 32, 64, 64), "",
+            UIButton(pygame.Rect(128, 32, 66, 66), "",
                      manager=self.ui_manager, container=self.get_container(), object_id="#sell_button",
                      tool_tip_text="<font size=2><b>Sell Turret</b><br><br>"
                                    "Sells the selected turret for half of the cost of building it.</font>"))

@@ -8,6 +8,20 @@
     }
   },
 
+  "button":
+  {
+    "colours":
+    {
+      "border": "#909090"
+    },
+
+    "misc":
+    {
+      "shadow_width": "1",
+      "border_width": "1"
+    }
+  },
+
   "tool_tip":
   {
     "colours":
