@@ -33,7 +33,7 @@ class TurretCosts:
 class HUDPanel(UIWindow):
     def __init__(self, rect: pygame.Rect, manager: 'pygame_gui.ui_manager.UIManager',
                  player_resources: PlayerResources, turret_costs: TurretCosts):
-        super().__init__(rect, manager)
+        super().__init__(rect, manager, ['hud_panel'])
         self.player_resources = player_resources
         self.turret_costs = turret_costs
 
