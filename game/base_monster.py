@@ -96,7 +96,7 @@ class BaseMonster(pygame.sprite.Sprite):
 
         self.slow_down_percentage = 1.0
 
-        self.health_bar = UIWorldSpaceHealthBar(pygame.Rect((0, 0), (self.rect.width, 6)), self, self.ui_manager)
+        self.health_bar = UIWorldSpaceHealthBar(pygame.Rect((0, 0), (self.rect.width+4, 8)), self, self.ui_manager)
 
     def set_starting_health(self, value):
         self.health_capacity = value

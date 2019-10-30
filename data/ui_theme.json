@@ -35,8 +35,8 @@
   {
     "colours":
     {
-      "border": "#505050",
-      "unfilled_bar": "#CCCCCC",
+      "border": "#F0F0F0",
+      "unfilled_bar": "#CCCCCC80",
       "filled_bar": "#f4251b"
     },
     "misc":
