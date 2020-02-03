@@ -41,7 +41,7 @@ class MainMenu(BaseAppState):
                                          "Start Game", self.ui_manager,
                                          tool_tip_text="<b>Click to Start.</b>")
 
-        #self.play_game_button.disable()
+        self.play_game_button.disable()
 
     def end(self):
         self.title_label.kill()
