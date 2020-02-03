@@ -1,0 +1,331 @@
+{
+  "defaults":
+  {
+    "colours":
+    {
+      "normal_bg": "#606060",
+      "hovered_bg": "#707070"
+    }
+  },
+
+  "tool_tip":
+  {
+    "colours":
+    {
+      "normal_text": "#FFFFFF",
+      "dark_bg": "#15191eCC"
+    }
+  },
+
+  "world_space_health_bar":
+  {
+    "colours":
+    {
+      "normal_border": "#F0F0F0A0",
+      "unfilled_bar": "#50505080",
+      "filled_bar": "#f4251b"
+    },
+    "misc":
+    {
+      "border_width": "1"
+    }
+  },
+
+  "#game_title":
+  {
+    "colours":
+    {
+      "normal_text": "#000000",
+      "dark_bg": "#FFFFFF00"
+    },
+    "font":
+    {
+      "name": "londrina_shadow",
+      "size": "150",
+      "regular_path": "data/LondrinaShadow-Regular.ttf"
+    }
+  },
+
+  "#game_sub_title":
+  {
+    "colours":
+    {
+      "normal_text": "#000000",
+      "dark_bg": "#FFFFFF00"
+    },
+    "font":
+    {
+      "name": "londrina_shadow",
+      "size": "50",
+      "regular_path": "data/LondrinaShadow-Regular.ttf"
+    }
+  },
+
+  "#screen_text":
+  {
+    "colours":
+    {
+      "normal_text": "#FFFFFF",
+      "dark_bg": "#00000000",
+      "text_shadow": "#505050"
+    },
+    "font":
+    {
+      "name": "just_another_hand",
+      "size": "32",
+      "regular_path": "data/JustAnotherHand.ttf"
+    },
+    "misc":
+    {
+      "text_shadow": "1",
+      "text_shadow_size": "1",
+      "text_shadow_offset": "0,0"
+    }
+  },
+
+  "#small_screen_text":
+  {
+    "colours":
+    {
+      "normal_text": "#FFFFFF",
+      "dark_bg": "#00000000",
+      "text_shadow": "#505050"
+    },
+    "font":
+    {
+      "name": "just_another_hand",
+      "size": "20"
+    },
+    "misc":
+    {
+      "text_shadow": "1",
+      "text_shadow_size": "1"
+    }
+  },
+
+  "#win_message_text":
+  {
+    "colours":
+    {
+      "normal_text": "#FFFFFF",
+      "dark_bg": "#00000000",
+      "text_shadow": "#505050"
+    },
+    "font":
+    {
+      "name": "just_another_hand",
+      "size": "64",
+      "regular_path": "data/JustAnotherHand.ttf"
+    },
+    "misc":
+    {
+      "text_shadow": "1",
+      "text_shadow_size": "1"
+    }
+  },
+
+  "#gun_turret_button":
+  {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
+    "images":
+    {
+      "normal_image":
+      {
+        "path": "images/image_atlas.png",
+        "sub_surface_rect": "0,384,64,64"
+      },
+      "hovered_image":
+      {
+        "path": "images/image_atlas.png",
+        "sub_surface_rect": "0,448,64,64"
+      }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
+  },
+  "#flame_turret_button":
+  {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "64,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "64,448,64,64"
+      }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
+  },
+  "#missile_turret_button":
+  {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "128,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "128,448,64,64"
+      }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
+  },
+  "#slow_turret_button":
+  {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "192,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "192,448,64,64"
+      }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
+  },
+  "#laser_turret_button":
+  {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "256,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "256,448,64,64"
+      }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
+  },
+  "#upgrade_button":
+  {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "384,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "384,448,64,64"
+      }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
+  },
+  "#sell_button":
+  {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
+    "images":
+    {
+      "normal_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "448,384,64,64"
+      },
+      "hovered_image":
+      {
+         "path": "images/image_atlas.png",
+         "sub_surface_rect": "448,448,64,64"
+      }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
+    }
+  }
+
+}

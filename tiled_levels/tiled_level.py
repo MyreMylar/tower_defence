@@ -101,6 +101,10 @@ class TiledLevel:
             if self.default_tile is None:
                 self.default_tile = new_tile_data
 
+    def clear(self):
+        for tile in self.tiles:
+            tile.kill()
+
     def toggle_tile_map(self):
         current_tile_map_index = 0
         all_maps_index = 0
@@ -161,7 +165,7 @@ class TiledLevel:
             y_offset = 0
         if y_offset >= int(self.level_pixel_size[1] - self.screen_data.play_area[1]):
             y_offset = int(self.level_pixel_size[1] - self.screen_data.play_area[1])
-            
+
         if self.initial_offset or not (x_offset == self.position_offset[0] and y_offset == self.position_offset[1]):
             if self.initial_offset:
                 self.initial_offset = False
