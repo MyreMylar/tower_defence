@@ -4,12 +4,16 @@ import pygame
 from pygame_gui import UIManager
 
 from game.app_states.app_state_manager import AppStateManager
-from game.app_states.main_menu import MainMenu
+from main_menu import MainMenu
 from game.app_states.select_level import SelectLevelMenu
 from game.app_states.quit_state import QuitState
-from game.app_states.game_state import GameState
+from game_state import GameState
 from game.app_states.editor_state import EditorState
 
+
+# -------------------------------------
+# Challenge 1 is in the main_menu file
+# -------------------------------------
 
 class ScreenData:
     def __init__(self, hud_size, editor_hud_size, screen_size):

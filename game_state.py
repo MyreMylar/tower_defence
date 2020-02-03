@@ -7,10 +7,10 @@ from pygame_gui.core import UIWindow
 from pygame_gui.elements import UILabel
 from pygame_gui.elements import UIButton
 
-from .base_app_state import BaseAppState
+from game.app_states.base_app_state import BaseAppState
 from collision.collision_grid import CollisionGrid
 from tiled_levels.tiled_level import TiledLevel
-from game.monster_wave_spawner import MonsterWaveSpawner
+from monster_wave_spawner import MonsterWaveSpawner
 from game.splat import SplatLoader
 from game.player_resources import PlayerResources
 
@@ -18,16 +18,32 @@ from game.gun_turret import GunTurret
 from game.flame_turret import FlameTurret
 from game.missile_turret import MissileTurret
 from game.slow_turret import SlowTurret
-from game.laser_turret import LaserTurret
+from laser_turret import LaserTurret
 
 
+# --------------------------------------------------------
+# Challenge 3 - Part A (Change 1 line)
+# -------------------------------------
+#
+# Enabling the laser turret.
+#
+# First thing to do is set it to cost
+# a sensible (affordable) amount to build below.
+#
+# HINT
+# ----
+# - Try 500.
+#
+# --------------------------
+# Challenge 3 continues in the 'laser_turret' code file.
+# ------------------------------------------------------
 class TurretCosts:
     def __init__(self):
         self.gun = 150
         self.flamer = 250
         self.missile = 400
         self.slow = 700
-        self.laser = 500
+        self.laser = 100000
 
 
 class HUDPanel(UIWindow):

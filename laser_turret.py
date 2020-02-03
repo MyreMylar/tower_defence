@@ -36,6 +36,8 @@ class LaserTurret(Turret):
             #
             # - Try examining the missile_turret code file in
             #  the game subdirectory.
+            # -----------------------------------------
+            # Scroll down for Part C
             # -------------------------------------------------------
 
             if self.current_target is not None:
@@ -56,9 +58,6 @@ class LaserTurret(Turret):
             y_dist = self.current_target.position[1] - self.position[1]
             self.current_vector[0] = x_dist/self.target_distance
             self.current_vector[1] = y_dist/self.target_distance
-            # results = self.calculate_aiming_vector(self.current_target, self.target_distance)
-            # self.target_vector = results[0]
-            # relative_angle_to_target = self.rotate_current_angle_to_target(time_delta)
             self.active_beam.set_beam_data(laser_start_pos, self.current_vector, self.beam_colour)
 
     # ----------------------------------------------
@@ -66,11 +65,13 @@ class LaserTurret(Turret):
     # ----------------------
     #
     # Set the laser beam to different colours when
-    # you level up.
+    # you level up. Use the self.beam_colour variable.
     #
     # - Set it to a green colour for level 2.
     # - Set it to a blue colour for level 3
-    # ----------------------------------------------
+    # --------------------------------------------------------
+    # That's the end! Congratulations if you made it this far.
+    # --------------------------------------------------------
     def upgrade(self):
         self.level += 1
         self.radius += (12 * self.level)

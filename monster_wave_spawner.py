@@ -6,7 +6,6 @@ from game.bulletproof_monster import BulletproofMonster
 from game.fireproof_monster import FireproofMonster
 from game.large_monster import LargeMonster
 from game.fast_tough_monster import FastToughMonster
-from game.large_tough_monster import LargeToughMonster
 
 
 class MonsterType:
@@ -68,7 +67,7 @@ class MonsterWaveSpawner:
         #   The last two parameters are the width and height of our rectangle
         #   and the first two are the image coordinates of the top left corner.
         # ----------------------------------------
-        # Scroll down for Challenge 2 part D !
+        # Scroll down for Challenge 2 part C !
         # ----------------------------------------
         self.all_monster_point_list = {StandardMonster.monster_id: MonsterType(StandardMonster.monster_id, 1),
                                        ToughMonster.monster_id: MonsterType(ToughMonster.monster_id, 2),
@@ -117,9 +116,6 @@ class MonsterWaveSpawner:
             self.wave_time_accumulator += time_delta
         elif self.current_wave_number < self.maximum_wave_number:
             self.wave_time_accumulator += time_delta
-        else:
-            pass
-
         if self.spawning_sub_waves:
             if self.sub_wave_acc > self.sub_wave_time:
                 self.sub_wave_acc = 0.0
@@ -173,7 +169,7 @@ class MonsterWaveSpawner:
     # - Once you've done it your new monster should be in the game and will
     #   Appear at around wave 8 in the game!
     # ---------------------------------------------------
-    # CHALLENGE 3 starts in the tower_defence code file.
+    # CHALLENGE 3 starts in the game_state code file.
     # ------------------------------------------------------------------------
     def pick_new_monster(self):
         monster_type = random.choice(self.available_monsters_for_wave)
@@ -207,7 +203,7 @@ class MonsterWaveSpawner:
         if monster_type.id == FastToughMonster.monster_id:
             new_monster = FastToughMonster(self.monster_walk_path, self.monster_image_dict,
                                            self.all_monster_point_list, self.all_monster_sprites,
-                                           self.screen_offset, self.collision_grid, self.splat_loader)
+                                           self.screen_offset, self.collision_grid, self.splat_loader, self.ui_manager)
 
         return new_monster
 
