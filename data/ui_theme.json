@@ -21,8 +21,8 @@
   {
     "colours":
     {
-      "normal_border": "#F0F0F0",
-      "unfilled_bar": "#CCCCCC80",
+      "normal_border": "#F0F0F0A0",
+      "unfilled_bar": "#50505080",
       "filled_bar": "#f4251b"
     },
     "misc":
@@ -126,22 +126,42 @@
 
   "#gun_turret_button":
   {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
     "images":
     {
       "normal_image":
       {
-         "path": "images/image_atlas.png",
-         "sub_surface_rect": "0,384,64,64"
+        "path": "images/image_atlas.png",
+        "sub_surface_rect": "0,384,64,64"
       },
       "hovered_image":
       {
-         "path": "images/image_atlas.png",
-         "sub_surface_rect": "0,448,64,64"
+        "path": "images/image_atlas.png",
+        "sub_surface_rect": "0,448,64,64"
       }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
     }
   },
   "#flame_turret_button":
   {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
     "images":
     {
       "normal_image":
@@ -154,10 +174,23 @@
          "path": "images/image_atlas.png",
          "sub_surface_rect": "64,448,64,64"
       }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
     }
   },
   "#missile_turret_button":
   {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
     "images":
     {
       "normal_image":
@@ -170,10 +203,23 @@
          "path": "images/image_atlas.png",
          "sub_surface_rect": "128,448,64,64"
       }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
     }
   },
   "#slow_turret_button":
   {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
     "images":
     {
       "normal_image":
@@ -186,10 +232,23 @@
          "path": "images/image_atlas.png",
          "sub_surface_rect": "192,448,64,64"
       }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
     }
   },
   "#laser_turret_button":
   {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
     "images":
     {
       "normal_image":
@@ -202,10 +261,23 @@
          "path": "images/image_atlas.png",
          "sub_surface_rect": "256,448,64,64"
       }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
     }
   },
   "#upgrade_button":
   {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
     "images":
     {
       "normal_image":
@@ -218,10 +290,23 @@
          "path": "images/image_atlas.png",
          "sub_surface_rect": "384,448,64,64"
       }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
     }
   },
   "#sell_button":
   {
+    "colours":
+    {
+      "normal_bg": "#9b9b9b",
+      "hovered_bg": "#b9b9b9",
+      "normal_border": "#3a3a3a",
+      "hovered_border": "#e8e8e8"
+    },
     "images":
     {
       "normal_image":
@@ -234,6 +319,12 @@
          "path": "images/image_atlas.png",
          "sub_surface_rect": "448,448,64,64"
       }
+    },
+    "misc":
+    {
+      "border_width": "2",
+      "shape": "rounded_rectangle",
+      "shape_corner_radius": "10"
     }
   }
 
