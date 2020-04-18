@@ -3,7 +3,7 @@ from collections import deque
 import pygame
 import pygame_gui
 
-from pygame_gui.core import UIWindow
+from pygame_gui.elements import UIWindow
 from pygame_gui.elements import UILabel
 from pygame_gui.elements import UIButton
 
@@ -33,7 +33,7 @@ class TurretCosts:
 class HUDPanel(UIWindow):
     def __init__(self, rect: pygame.Rect, manager: 'pygame_gui.ui_manager.UIManager',
                  player_resources: PlayerResources, turret_costs: TurretCosts):
-        super().__init__(rect, manager, ['hud_panel'])
+        super().__init__(rect, manager, 'hud_panel')
         self.player_resources = player_resources
         self.turret_costs = turret_costs
 
