@@ -57,7 +57,7 @@ class SelectLevelMenu(BaseAppState):
             self.level_group_y_start += 25
             
         if len(self.level_button_group) > 0:
-            self.ui_manager.select_focus_element(self.level_button_group[0])
+            self.ui_manager.set_focus_element(self.level_button_group[0])
 
     def end(self):
         self.title_label.kill()
@@ -99,7 +99,7 @@ class SelectLevelMenu(BaseAppState):
                         self.trigger_transition()
 
                     if event.ui_object_id == "#choose_level_button":
-                        self.ui_manager.select_focus_element(event.ui_element)
+                        self.ui_manager.set_focus_element(event.ui_element)
                         for level_data in self.all_level_paths:
                             if level_data.display_name == event.ui_element.text:
                                 self.selected_level_path = level_data.path
