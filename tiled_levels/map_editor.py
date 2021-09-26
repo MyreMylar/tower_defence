@@ -192,18 +192,19 @@ class MapEditor:
                                 "Right mouse click to place tile<br>"
                                 "'>' and '<' to rotate selected tile<br>"
                                 "F5 or quit to save map<br>")
-        self.instruction_message_window = UIMessageWindow(pygame.Rect((362, 100), (300, 250)),
-                                                          "Instructions",
+        self.instruction_message_window = UIMessageWindow(pygame.Rect((312, 100), (400, 250)),
                                                           instructions_message,
-                                                          self.ui_manager)
+                                                          self.ui_manager,
+                                                          window_title="Instructions")
 
-        self.level_name_label = UILabel(pygame.Rect((462, 8), (100, 34)), self.tiled_level.level_name,
+        self.level_name_label = UILabel(pygame.Rect((462, 8), (100, 34)),
+                                        self.tiled_level.level_name,
                                         self.ui_manager, object_id="#screen_text")
 
-        self.make_new_button = UIButton(pygame.Rect(870, self.hud_rect[1] + 24, 100, 20),
+        self.make_new_button = UIButton(pygame.Rect(870, self.hud_rect[1] + 24, 150, 20),
                                         "Make New", self.ui_manager)
 
-        self.tile_set_button = UIButton(pygame.Rect(870, self.hud_rect[1] + 49, 100, 20),
+        self.tile_set_button = UIButton(pygame.Rect(870, self.hud_rect[1] + 49, 150, 20),
                                         "Switch Tiles", self.ui_manager)
 
         self.playable_area_display = PlayableAreaDisplay()

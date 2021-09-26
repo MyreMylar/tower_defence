@@ -3,7 +3,7 @@ from collections import deque
 import pygame
 import pygame_gui
 
-from pygame_gui.elements import UIWindow
+from pygame_gui.elements import UIPanel
 from pygame_gui.elements import UILabel
 from pygame_gui.elements import UIButton
 
@@ -30,10 +30,10 @@ class TurretCosts:
         self.laser = 500
 
 
-class HUDPanel(UIWindow):
+class HUDPanel(UIPanel):
     def __init__(self, rect: pygame.Rect, manager: 'pygame_gui.ui_manager.UIManager',
                  player_resources: PlayerResources, turret_costs: TurretCosts):
-        super().__init__(rect, manager, 'hud_panel')
+        super().__init__(rect, 1, manager, element_id='hud_panel')
         self.player_resources = player_resources
         self.turret_costs = turret_costs
 
@@ -505,40 +505,40 @@ class GameState(BaseAppState):
 
             if event.type == pygame.USEREVENT:
                 if event.user_type == "ui_button_pressed":
-                    if event.ui_object_id == "#gun_turret_button":
+                    if "#gun_turret_button" in event.ui_object_id:
                         if self.turret_costs.gun <= self.player_resources.current_cash:
                             new_turret = GunTurret(pygame.mouse.get_pos(), self.turret_costs.gun,
                                                    self.explosions_sprite_sheet,
                                                    self.image_atlas, self.collision_grid)
                             self.mouse_active_turret = new_turret
                             self.turrets.append(new_turret)
-                    elif event.ui_object_id == "#flame_turret_button":
+                    elif "#flame_turret_button" in event.ui_object_id:
                         if self.turret_costs.flamer <= self.player_resources.current_cash:
                             new_turret = FlameTurret(pygame.mouse.get_pos(), self.turret_costs.flamer,
                                                      self.explosions_sprite_sheet, self.image_atlas,
                                                      self.collision_grid)
                             self.mouse_active_turret = new_turret
                             self.turrets.append(new_turret)
-                    elif event.ui_object_id == "#missile_turret_button":
+                    elif "#missile_turret_button" in event.ui_object_id:
                         if self.turret_costs.missile <= self.player_resources.current_cash:
                             new_turret = MissileTurret(pygame.mouse.get_pos(), self.turret_costs.missile,
                                                        self.explosions_sprite_sheet, self.image_atlas,
                                                        self.collision_grid)
                             self.mouse_active_turret = new_turret
                             self.turrets.append(new_turret)
-                    elif event.ui_object_id == "#slow_turret_button":
+                    elif "#slow_turret_button" in event.ui_object_id:
                         if self.turret_costs.slow <= self.player_resources.current_cash:
                             new_turret = SlowTurret(pygame.mouse.get_pos(), self.turret_costs.slow,
                                                     self.image_atlas)
                             self.mouse_active_turret = new_turret
                             self.turrets.append(new_turret)
-                    elif event.ui_object_id == "#laser_turret_button":
+                    elif "#laser_turret_button" in event.ui_object_id:
                         if self.turret_costs.laser <= self.player_resources.current_cash:
                             new_turret = LaserTurret(pygame.mouse.get_pos(), self.turret_costs.laser,
                                                      self.image_atlas)
                             self.mouse_active_turret = new_turret
                             self.turrets.append(new_turret)
-                    elif event.ui_object_id == "#upgrade_button":
+                    elif "#upgrade_button" in event.ui_object_id:
                         if self.active_upgrade_turret is not None:
                             if self.player_resources.current_cash >= self.active_upgrade_turret.get_upgrade_cost():
                                 self.player_resources.current_cash -= self.active_upgrade_turret.get_upgrade_cost()
@@ -546,7 +546,7 @@ class GameState(BaseAppState):
                                 self.upgrade_hud_active = False
                                 self.active_upgrade_turret = None
                                 self.hud_panel.display_normal_hud()
-                    elif event.ui_object_id == "#sell_button":
+                    elif "#sell_button" in event.ui_object_id:
                         if self.active_upgrade_turret is not None:
                             self.player_resources.current_cash += self.active_upgrade_turret.get_sell_value()
                             for square in self.tiled_level.turret_squares:
