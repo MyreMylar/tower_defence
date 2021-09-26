@@ -34,7 +34,7 @@ class MainMenu(BaseAppState):
         self.play_game_button = None
 
     def start(self):
-        self.title_label = UILabel(pygame.Rect((87, 40), (850, 178)), "Turret Warfare",
+        self.title_label = UILabel(pygame.Rect((87, 40), (850, 180)), "Turret Warfare",
                                    self.ui_manager, object_id="#game_title")
 
         self.play_game_button = UIButton(pygame.Rect((437, 515), (150, 35)),
