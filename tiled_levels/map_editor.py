@@ -2,6 +2,7 @@ import os
 import math
 
 import pygame
+import pygame_gui
 from pygame.locals import *
 from pygame_gui.windows import UIMessageWindow
 from pygame_gui.elements import UIButton, UILabel
@@ -318,17 +319,16 @@ class MapEditor:
         for event in pygame.event.get():
             self.ui_manager.process_events(event)
 
-            if event.type == USEREVENT:
-                if event.user_type == "ui_button_pressed":
-                    if event.ui_element == self.make_new_button:
-                        new_level_num = len(self.current_levels) + 1
-                        new_level_name = "Level " + str(new_level_num)
-                        self.tiled_level.change_level_name_and_save(new_level_name)
-                        self.level_name_label.set_text(self.tiled_level.level_name)
-                    elif event.ui_element == self.tile_set_button:
-                        self.tiled_level.toggle_tile_map()
-                        for tile in self.palette_tiles:
-                            tile.reload_tile_image_from_data(self.tiled_level.all_tile_data)
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == self.make_new_button:
+                    new_level_num = len(self.current_levels) + 1
+                    new_level_name = "Level " + str(new_level_num)
+                    self.tiled_level.change_level_name_and_save(new_level_name)
+                    self.level_name_label.set_text(self.tiled_level.level_name)
+                elif event.ui_element == self.tile_set_button:
+                    self.tiled_level.toggle_tile_map()
+                    for tile in self.palette_tiles:
+                        tile.reload_tile_image_from_data(self.tiled_level.all_tile_data)
 
             if event.type == QUIT:
                 self.tiled_level.save_tiles()

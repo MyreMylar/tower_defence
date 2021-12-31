@@ -86,23 +86,22 @@ class SelectLevelMenu(BaseAppState):
 
             self.ui_manager.process_events(event)
 
-            if event.type == pygame.USEREVENT:
-                if event.user_type == "ui_button_pressed":
-                    if event.ui_element == self.play_game_button:
-                        self.set_target_state_name('game')
-                        self.outgoing_transition_data['selected_level_path'] = self.selected_level_path
-                        self.trigger_transition()
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == self.play_game_button:
+                    self.set_target_state_name('game')
+                    self.outgoing_transition_data['selected_level_path'] = self.selected_level_path
+                    self.trigger_transition()
 
-                    if event.ui_element == self.edit_map_button:
-                        self.set_target_state_name('editor')
-                        self.outgoing_transition_data['selected_level_path'] = self.selected_level_path
-                        self.trigger_transition()
+                if event.ui_element == self.edit_map_button:
+                    self.set_target_state_name('editor')
+                    self.outgoing_transition_data['selected_level_path'] = self.selected_level_path
+                    self.trigger_transition()
 
-                    if event.ui_object_id == "#choose_level_button":
-                        self.ui_manager.set_focus_set(event.ui_element)
-                        for level_data in self.all_level_paths:
-                            if level_data.display_name == event.ui_element.text:
-                                self.selected_level_path = level_data.path
+                if event.ui_object_id == "#choose_level_button":
+                    self.ui_manager.set_focus_set(event.ui_element)
+                    for level_data in self.all_level_paths:
+                        if level_data.display_name == event.ui_element.text:
+                            self.selected_level_path = level_data.path
 
         self.ui_manager.update(time_delta)
 

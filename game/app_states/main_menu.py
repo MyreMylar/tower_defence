@@ -43,11 +43,10 @@ class MainMenu(BaseAppState):
                 
             self.ui_manager.process_events(event)
               
-            if event.type == pygame.USEREVENT:
-                if event.user_type == "ui_button_pressed":
-                    if event.ui_element == self.play_game_button:
-                        self.set_target_state_name('select_level')
-                        self.trigger_transition()
+            if event.type == pygame_gui.UI_BUTTON_PRESSED:
+                if event.ui_element == self.play_game_button:
+                    self.set_target_state_name('select_level')
+                    self.trigger_transition()
 
         self.ui_manager.update(time_delta)
 
